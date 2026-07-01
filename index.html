@@ -3,82 +3,493 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <title>AUROS 인턴십 — 반도체 논문 한국어 번역 아카이브</title>
+  <title>반도체 논문 한국어 번역 아카이브</title>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&family=Noto+Serif+KR:wght@400;600&display=swap" rel="stylesheet"/>
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     body{font-family:'Noto Sans KR',sans-serif;background:#f5f7fa;color:#1a1a1a;min-height:100vh}
-    .site-header{background:#0e2a47;padding:36px 40px 32px}
-    .header-inner{max-width:900px;margin:0 auto}
-    .site-label{font-size:11px;font-weight:600;letter-spacing:.15em;color:#6fa8d4;text-transform:uppercase;margin-bottom:10px}
-    .site-title{font-family:'Noto Serif KR',serif;font-size:26px;font-weight:600;color:#fff;line-height:1.35;margin-bottom:8px}
-    .site-subtitle{font-size:13.5px;color:#8fb8d8;line-height:1.6}
-    .main{max-width:900px;margin:0 auto;padding:44px 40px 80px}
-    .section-group{margin-bottom:48px}
-    .section-header{display:flex;align-items:center;gap:14px;margin-bottom:20px;padding-bottom:12px;border-bottom:2px solid #1a4a7a}
-    .section-badge{background:#1a4a7a;color:#fff;font-size:11px;font-weight:700;padding:4px 11px;border-radius:20px}
+
+    /* Header */
+    .site-header{background:#0e2a47;padding:40px 40px 34px}
+    .header-inner{max-width:960px;margin:0 auto}
+    .site-label{font-size:11px;font-weight:600;letter-spacing:.15em;color:#6fa8d4;text-transform:uppercase;margin-bottom:12px}
+    .site-title{font-family:'Noto Serif KR',serif;font-size:28px;font-weight:600;color:#fff;line-height:1.35;margin-bottom:10px}
+    .site-subtitle{font-size:13.5px;color:#8fb8d8;line-height:1.7}
+    .header-stats{display:flex;gap:24px;margin-top:24px}
+    .stat{background:rgba(255,255,255,.08);border-radius:8px;padding:10px 20px;text-align:center}
+    .stat-num{font-size:22px;font-weight:700;color:#fff}
+    .stat-lbl{font-size:11px;color:#6fa8d4;margin-top:2px}
+
+    /* Main */
+    .main{max-width:960px;margin:0 auto;padding:44px 40px 80px}
+    .updated{font-size:11px;color:#aaa;text-align:right;margin-bottom:28px}
+
+    /* Section group */
+    .section-group{margin-bottom:52px}
+    .section-header{display:flex;align-items:center;gap:12px;margin-bottom:18px;padding-bottom:12px;border-bottom:2px solid #1a4a7a}
+    .section-badge{background:#1a4a7a;color:#fff;font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;white-space:nowrap}
     .section-title{font-size:16px;font-weight:700;color:#0e2a47}
-    .section-count{margin-left:auto;font-size:12px;color:#888}
-    .paper-list{display:flex;flex-direction:column;gap:14px}
-    .paper-card{display:block;background:#fff;border:1px solid #dce6f0;border-radius:10px;padding:22px 26px;text-decoration:none;color:inherit;transition:all .18s}
+    .section-desc{font-size:12.5px;color:#777;margin-left:4px}
+    .section-count{margin-left:auto;font-size:12px;color:#888;white-space:nowrap}
+
+    /* Paper cards */
+    .paper-list{display:flex;flex-direction:column;gap:12px}
+    .paper-card{display:flex;align-items:flex-start;gap:16px;background:#fff;border:1px solid #dce6f0;border-radius:10px;padding:18px 22px;text-decoration:none;color:inherit;transition:all .18s}
     .paper-card:hover{border-color:#1a4a7a;box-shadow:0 4px 18px rgba(26,74,122,.12);transform:translateY(-2px)}
-    .paper-title-kr{font-family:'Noto Serif KR',serif;font-size:15.5px;font-weight:600;color:#0e2a47;line-height:1.45;margin-bottom:14px}
-    .paper-meta{display:flex;flex-wrap:wrap;gap:8px}
-    .meta-tag{display:inline-flex;align-items:center;gap:4px;background:#f0f4fa;border:1px solid #d0dce9;border-radius:5px;padding:3px 9px;font-size:11.5px;color:#555}
-    .meta-tag span{font-weight:500}
-    .site-footer{background:#0e2a47;color:#6fa8d4;font-size:12px;text-align:center;padding:20px}
-    .updated{font-size:11px;color:#aaa;text-align:right;margin-bottom:20px}
+    .paper-num{flex-shrink:0;width:28px;height:28px;background:#eef3fa;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#1a4a7a;margin-top:2px}
+    .paper-body{flex:1;min-width:0}
+    .paper-title-kr{font-family:'Noto Serif KR',serif;font-size:14.5px;font-weight:600;color:#0e2a47;line-height:1.5;margin-bottom:10px}
+    .paper-meta{display:flex;flex-wrap:wrap;gap:6px}
+    .meta-tag{display:inline-flex;align-items:center;gap:3px;background:#f0f4fa;border:1px solid #d8e4f0;border-radius:5px;padding:2px 8px;font-size:11px;color:#555;font-weight:500}
+    .meta-tag.transcript{background:#fff8e8;border-color:#f0d890;color:#8a6000}
+    .meta-tag.poster{background:#f0faee;border-color:#b8deb0;color:#2a6020}
+
+    /* Footer */
+    .site-footer{background:#0e2a47;color:#6fa8d4;font-size:12px;text-align:center;padding:22px 20px}
+
+    @media(max-width:640px){
+      .site-header{padding:28px 20px}
+      .main{padding:28px 20px 60px}
+      .header-stats{gap:12px}
+      .stat{padding:8px 14px}
+    }
   </style>
 </head>
 <body>
+
 <header class="site-header">
   <div class="header-inner">
-    <div class="site-label">AUROS 인턴십 · P2 논문 번역 아카이브</div>
+    <div class="site-label">AUROS 인턴십 · 논문 번역 아카이브</div>
     <div class="site-title">반도체 논문 한국어 번역 모음</div>
-    <div class="site-subtitle">반도체 공정 및 계측 관련 최신 학술 논문을 한국어로 번역하여 정리한 아카이브입니다.<br>총 5편 수록</div>
+    <div class="site-subtitle">
+      반도체 공정 및 계측 관련 최신 학술 논문을 한국어로 번역하여 정리한 아카이브입니다.<br>
+      오버레이 계측, 웨이퍼 본딩, DRAM 공정, OCD 계측 등 주요 분야를 다룹니다.
+    </div>
+    <div class="header-stats">
+      <div class="stat"><div class="stat-num">32</div><div class="stat-lbl">총 논문 수</div></div>
+      <div class="stat"><div class="stat-num">6</div><div class="stat-lbl">세션 그룹</div></div>
+      <div class="stat"><div class="stat-num">2026</div><div class="stat-lbl">업데이트 연도</div></div>
+    </div>
   </div>
 </header>
+
 <main class="main">
-  <div class="updated">마지막 업데이트: 2026-07-01 13:59</div>
+  <div class="updated">마지막 업데이트: 2026-07-01</div>
+
+  <!-- ===================== POSTER ===================== -->
   <div class="section-group">
     <div class="section-header">
-      <span class="section-badge">Section 4</span>
-      <span class="section-title">웨이퍼 본딩 및 오버레이 계측</span>
-      <span class="section-count">논문 5편</span>
+      <span class="section-badge">Poster</span>
+      <span class="section-title">포스터 세션</span>
+      <span class="section-desc">— 오버레이 계측·제어·타겟 최적화</span>
+      <span class="section-count">14편</span>
     </div>
-    <div class="paper-list"><a class="paper-card" href="S4_1. WxW_bonding_overlay_한국어번역.html">
-        <div class="paper-title-kr">3D 집적화를 위한 웨이퍼-투-웨이퍼 하이브리드 본딩의고도화된 오버레이 계측</div>
-        <div class="paper-meta">
-          <div class="meta-tag">📅 <span>2026</span></div>
-          <div class="meta-tag">🏷 <span>Section 4</span></div>
+    <div class="paper-list">
+
+      <a class="paper-card" href="Poster_01. 3P_cDBO_오버레이_강건성_한국어번역.html">
+        <div class="paper-num">01</div>
+        <div class="paper-body">
+          <div class="paper-title-kr">3-피치 cDBO: 첨단 로직 소자를 위한 공정 강건성을 갖는 새로운 오버레이 마크</div>
+          <div class="paper-meta">
+            <div class="meta-tag poster">🗂 Poster</div>
+            <div class="meta-tag">cDBO · 오버레이 마크 · 로직</div>
+          </div>
         </div>
-      </a><a class="paper-card" href="S4_1. WxW_bonding_overlay_한국어번역.html">
-        <div class="paper-title-kr">BS-PDN을 위한 WxW 본딩 공정의오버레이 시그니처 특성화 및 예측</div>
-        <div class="paper-meta">
-          <div class="meta-tag">📅 <span>2026</span></div>
-          <div class="meta-tag">🏷 <span>Section 4</span></div>
+      </a>
+
+      <a class="paper-card" href="Poster_02. AEI_샘플링_경계오버레이_한국어번역.html">
+        <div class="paper-num">02</div>
+        <div class="paper-body">
+          <div class="paper-title-kr">경계 유발 오버레이 변동성 해결을 위한 강건한 AEI 샘플링 전략</div>
+          <div class="paper-meta">
+            <div class="meta-tag poster">🗂 Poster</div>
+            <div class="meta-tag">AEI · 샘플링 · 경계 오버레이</div>
+          </div>
         </div>
-      </a><a class="paper-card" href="P2_Paper%20%EC%9A%94%EC%95%BD/Section%204/s4_vts-ml-cu-recess-monitoring_KR.html">
-        <div class="paper-title-kr">VTS-ML(수직 주사 산란계측 머신러닝)을 이용한 하이브리드 본딩 Cu 리세스 인라인 모니터링</div>
-        <div class="paper-meta">
-          <div class="meta-tag">📅 <span>2026</span></div>
-          <div class="meta-tag">🏷 <span>Section 4</span></div>
+      </a>
+
+      <a class="paper-card" href="Poster_03. 3D_NAND_OPO_오버레이_튜닝방법론_한국어번역.html">
+        <div class="paper-num">03</div>
+        <div class="paper-body">
+          <div class="paper-title-kr">3D NAND 온-제품 오버레이 제어를 위한 체계적 튜닝 방법론</div>
+          <div class="paper-meta">
+            <div class="meta-tag poster">🗂 Poster</div>
+            <div class="meta-tag">3D NAND · OPO · 튜닝 방법론</div>
+          </div>
         </div>
-      </a><a class="paper-card" href="P2_Paper%20%EC%9A%94%EC%95%BD/Section%204/s4_zernike-overlay-fingerprint_KR.html">
-        <div class="paper-title-kr">제르니케 다항식을 이용한본딩 유발 오버레이 핑거프린트 모델링</div>
-        <div class="paper-meta">
-          <div class="meta-tag">📅 <span>2026</span></div>
-          <div class="meta-tag">🏷 <span>Section 4</span></div>
+      </a>
+
+      <a class="paper-card" href="Poster_05. Overlay_FusionML_한국어번역.html">
+        <div class="paper-num">05</div>
+        <div class="paper-body">
+          <div class="paper-title-kr">서브-1nm 오버레이 예측 향상을 위한 도메인 지식 기반 융합 머신러닝</div>
+          <div class="paper-meta">
+            <div class="meta-tag poster">🗂 Poster</div>
+            <div class="meta-tag">FusionML · 서브-1nm · 오버레이 예측</div>
+          </div>
         </div>
-      </a><a class="paper-card" href="P2_Paper%20%EC%9A%94%EC%95%BD/Section%204/wafer-bonding-distortion-kr.html">
-        <div class="paper-title-kr">Wafer Bonding Distortion</div>
-        <div class="paper-meta">
-          <div class="meta-tag">📅 <span>2026</span></div>
-          <div class="meta-tag">🏷 <span>Section 4</span></div>
+      </a>
+
+      <a class="paper-card" href="Poster_06. DBM_대면적오버레이_반도체오류보정_한국어번역.html">
+        <div class="paper-num">06</div>
+        <div class="paper-body">
+          <div class="paper-title-kr">DBM 대면적 오버레이 측정을 통한 반도체 소자의 오류 보정 방법론</div>
+          <div class="paper-meta">
+            <div class="meta-tag poster">🗂 Poster</div>
+            <div class="meta-tag">DBM · 대면적 오버레이 · 오류 보정</div>
+          </div>
         </div>
-      </a></div>
+      </a>
+
+      <a class="paper-card" href="Poster_07. GRACE_포토리소그래피_오버레이_가상계측_한국어번역.html">
+        <div class="paper-num">07</div>
+        <div class="paper-body">
+          <div class="paper-title-kr">GRACE: 포토리소그래피 오버레이 가상 계측을 위한 그래디언트 기반 모델 독립적 설명 가능성 프레임워크</div>
+          <div class="paper-meta">
+            <div class="meta-tag poster">🗂 Poster</div>
+            <div class="meta-tag">GRACE · 가상 계측 · XAI</div>
+          </div>
+        </div>
+      </a>
+
+      <a class="paper-card" href="Poster_08. AIMid_오버레이계측_마크극성_크로스토크_회복토포그래피_한국어번역.html">
+        <div class="paper-num">08</div>
+        <div class="paper-body">
+          <div class="paper-title-kr">마크 극성, 크로스토크 및 회복 토포그래피가 AIMid 오버레이 계측에 미치는 영향</div>
+          <div class="paper-meta">
+            <div class="meta-tag poster">🗂 Poster</div>
+            <div class="meta-tag">AIMid · 마크 극성 · 크로스토크</div>
+          </div>
+        </div>
+      </a>
+
+      <a class="paper-card" href="Poster_09. PCA_Overlay_HVM_한국어번역.html">
+        <div class="paper-num">09</div>
+        <div class="paper-body">
+          <div class="paper-title-kr">PCA를 활용한 오버레이 변동 분석 및 근본 원인 규명</div>
+          <div class="paper-meta">
+            <div class="meta-tag poster">🗂 Poster</div>
+            <div class="meta-tag">PCA · HVM · 근본 원인 분석</div>
+          </div>
+        </div>
+      </a>
+
+      <a class="paper-card" href="Poster_10. COMET_색수차오버레이계측_한국어번역.html">
+        <div class="paper-num">10</div>
+        <div class="paper-body">
+          <div class="paper-title-kr">단일 파장 처리량에서의 다중파장 오버레이 계측: 색수차 오버레이 계측법(COMET)</div>
+          <div class="paper-meta">
+            <div class="meta-tag poster">🗂 Poster</div>
+            <div class="meta-tag">COMET · 색수차 · 다중파장</div>
+          </div>
+        </div>
+      </a>
+
+      <a class="paper-card" href="Poster_11. NZO_DRAM_SWORD_COMET_한국어번역.html">
+        <div class="paper-num">11</div>
+        <div class="paper-body">
+          <div class="paper-title-kr">DRAM NZO 개선 — SWORD 및 COMET 기법 적용</div>
+          <div class="paper-meta">
+            <div class="meta-tag poster">🗂 Poster</div>
+            <div class="meta-tag">NZO · DRAM · SWORD · COMET</div>
+          </div>
+        </div>
+      </a>
+
+      <a class="paper-card" href="Poster_12. Overlay_Metrology_서브나노미터_한국어번역.html">
+        <div class="paper-num">12</div>
+        <div class="paper-body">
+          <div class="paper-title-kr">서브나노미터 오버레이 시대 진입 시 오버레이 계측 성능 사양의 도전</div>
+          <div class="paper-meta">
+            <div class="meta-tag poster">🗂 Poster</div>
+            <div class="meta-tag">서브나노미터 · 계측 사양 · 성능 한계</div>
+          </div>
+        </div>
+      </a>
+
+      <a class="paper-card" href="Poster_13. SEM_오버레이_타겟최적화_DL시뮬레이션_한국어번역.html">
+        <div class="paper-num">13</div>
+        <div class="paper-body">
+          <div class="paper-title-kr">SEM 오버레이 타겟 최적화 및 계측 레시피 검증 — 딥러닝 시뮬레이션 활용</div>
+          <div class="paper-meta">
+            <div class="meta-tag poster">🗂 Poster</div>
+            <div class="meta-tag">SEM · 딥러닝 · 타겟 최적화</div>
+          </div>
+        </div>
+      </a>
+
+      <a class="paper-card" href="Poster_14. OPO_오버레이타겟_소형화_한국어번역.html">
+        <div class="paper-num">14</div>
+        <div class="paper-body">
+          <div class="paper-title-kr">이미지 기반 오버레이 타겟 소형화</div>
+          <div class="paper-meta">
+            <div class="meta-tag poster">🗂 Poster</div>
+            <div class="meta-tag">OPO · 타겟 소형화 · 이미지 기반</div>
+          </div>
+        </div>
+      </a>
+
+      <a class="paper-card" href="Poster_15. Smart_Zernike_CDU_한국어번역.html">
+        <div class="paper-num">15</div>
+        <div class="paper-body">
+          <div class="paper-title-kr">Smart Zernike: 향상된 트랙 모듈 매칭 및 CDU 제어를 위한 자동화된 모델 항 선택</div>
+          <div class="paper-meta">
+            <div class="meta-tag poster">🗂 Poster</div>
+            <div class="meta-tag">Zernike · CDU · 자동화</div>
+          </div>
+        </div>
+      </a>
+
+    </div>
   </div>
+
+  <!-- ===================== SESSION 4 ===================== -->
+  <div class="section-group">
+    <div class="section-header">
+      <span class="section-badge">Session 4</span>
+      <span class="section-title">웨이퍼 본딩 및 3D 집적 오버레이</span>
+      <span class="section-count">5편</span>
+    </div>
+    <div class="paper-list">
+
+      <a class="paper-card" href="S4_1. WxW_bonding_overlay_한국어번역.html">
+        <div class="paper-num">S4-1</div>
+        <div class="paper-body">
+          <div class="paper-title-kr">BS-PDN을 위한 WxW 본딩 공정의 오버레이 시그니처 특성 분석 및 예측</div>
+          <div class="paper-meta">
+            <div class="meta-tag">WxW · BS-PDN · 오버레이 시그니처</div>
+          </div>
+        </div>
+      </a>
+
+      <a class="paper-card" href="S4_2. VTS_ML_HybridBonding_한국어번역.html">
+        <div class="paper-num">S4-2</div>
+        <div class="paper-body">
+          <div class="paper-title-kr">하이브리드 본딩 Cu 리세스 인라인 모니터링 — VTS-ML 활용</div>
+          <div class="paper-meta">
+            <div class="meta-tag">VTS-ML · 하이브리드 본딩 · Cu 리세스</div>
+          </div>
+        </div>
+      </a>
+
+      <a class="paper-card" href="S4_3. Advanced_Overlay_Metrology_W2W_한국어번역.html">
+        <div class="paper-num">S4-3</div>
+        <div class="paper-body">
+          <div class="paper-title-kr">3D 집적을 위한 W2W 하이브리드 본딩 고급 오버레이 계측</div>
+          <div class="paper-meta">
+            <div class="meta-tag">W2W · 하이브리드 본딩 · 오버레이 계측</div>
+          </div>
+        </div>
+      </a>
+
+      <a class="paper-card" href="S4_4. Zernike_Bonding_Overlay_한국어번역.html">
+        <div class="paper-num">S4-4</div>
+        <div class="paper-body">
+          <div class="paper-title-kr">제르니케 다항식을 이용한 본딩 유발 오버레이 핑거프린트 모델링</div>
+          <div class="paper-meta">
+            <div class="meta-tag">제르니케 · 본딩 · 핑거프린트</div>
+          </div>
+        </div>
+      </a>
+
+      <a class="paper-card" href="S4_5. Bonding_Distortion_Litho_한국어번역.html">
+        <div class="paper-num">S4-5</div>
+        <div class="paper-body">
+          <div class="paper-title-kr">웨이퍼 본딩 유발 왜곡의 특성화 및 완화</div>
+          <div class="paper-meta">
+            <div class="meta-tag">본딩 왜곡 · 리소그래피 보정</div>
+          </div>
+        </div>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- ===================== SESSION 9 ===================== -->
+  <div class="section-group">
+    <div class="section-header">
+      <span class="section-badge">Session 9</span>
+      <span class="section-title">광학 오버레이 계측 기술</span>
+      <span class="section-count">4편</span>
+    </div>
+    <div class="paper-list">
+
+      <a class="paper-card" href="S9_1. Optical_Overlay_Metrology_한국어번역.html">
+        <div class="paper-num">S9-1</div>
+        <div class="paper-body">
+          <div class="paper-title-kr">차세대 반도체 노드에서의 광학 오버레이 계측 과제</div>
+          <div class="paper-meta">
+            <div class="meta-tag">광학 계측 · 차세대 노드</div>
+          </div>
+        </div>
+      </a>
+
+      <a class="paper-card" href="S9_2. WxW_Bonding_EUV_Overlay_Imaging_한국어번역.html">
+        <div class="paper-num">S9-2</div>
+        <div class="paper-body">
+          <div class="paper-title-kr">웨이퍼-투-웨이퍼 본딩 후 EUV/DUV 리소그래피를 위한 스캐너 보정 공동 최적화</div>
+          <div class="paper-meta">
+            <div class="meta-tag">EUV · DUV · 스캐너 보정</div>
+          </div>
+        </div>
+      </a>
+
+      <a class="paper-card" href="S9_3. FLASH_EPE_ThruStack_Overlay_한국어번역.html">
+        <div class="paper-num">S9-3</div>
+        <div class="paper-body">
+          <div class="paper-title-kr">FLASH 다층 제품 스택을 위한 EPE 인식 스루-스택 오버레이 최적화</div>
+          <div class="paper-meta">
+            <div class="meta-tag">FLASH · EPE · 스루-스택 오버레이</div>
+          </div>
+        </div>
+      </a>
+
+      <a class="paper-card" href="S9_4. 첨단DRAM_오버레이정확도향상_NZO안정성_한국어번역.html">
+        <div class="paper-num">S9-4</div>
+        <div class="paper-body">
+          <div class="paper-title-kr">첨단 DRAM 공정 호환 타겟을 통한 오버레이 정확도 향상 및 NZO 안정성 개선</div>
+          <div class="paper-meta">
+            <div class="meta-tag">DRAM · NZO · 오버레이 정확도</div>
+          </div>
+        </div>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- ===================== SESSION 10 ===================== -->
+  <div class="section-group">
+    <div class="section-header">
+      <span class="section-badge">Session 10</span>
+      <span class="section-title">DRAM 공정 오버레이 제어</span>
+      <span class="section-count">4편</span>
+    </div>
+    <div class="paper-list">
+
+      <a class="paper-card" href="S10_1. DRAM_MTD_사선교차레이어_한국어번역.html">
+        <div class="paper-num">S10-1</div>
+        <div class="paper-body">
+          <div class="paper-title-kr">DRAM 제품의 사선 교차 레이어에 대한 새로운 MTD 제어 방법</div>
+          <div class="paper-meta">
+            <div class="meta-tag">DRAM · MTD · 사선 교차 레이어</div>
+          </div>
+        </div>
+      </a>
+
+      <a class="paper-card" href="S10_2. DRAM_Overlay_ML_발표전사문_한국어번역.html">
+        <div class="paper-num">S10-2</div>
+        <div class="paper-body">
+          <div class="paper-title-kr">DRAM 공정 오버레이 제어 최적화 — 머신러닝 접근법</div>
+          <div class="paper-meta">
+            <div class="meta-tag transcript">📝 발표 전사문</div>
+            <div class="meta-tag">DRAM · ML · 오버레이 최적화</div>
+          </div>
+        </div>
+      </a>
+
+      <a class="paper-card" href="S10_3. DRAM패터닝_컨투어기반계측_한국어번역.html">
+        <div class="paper-num">S10-3</div>
+        <div class="paper-body">
+          <div class="paper-title-kr">고급 DRAM 패터닝에서 층별 변동성 분석을 위한 컨투어 기반 계측</div>
+          <div class="paper-meta">
+            <div class="meta-tag">DRAM · 컨투어 계측 · 패터닝</div>
+          </div>
+        </div>
+      </a>
+
+      <a class="paper-card" href="S10_5. 고전압CFE_DRAM_ADI오버레이측정_한국어번역.html">
+        <div class="paper-num">S10-5</div>
+        <div class="paper-body">
+          <div class="paper-title-kr">고전압 CFE 기술을 활용한 첨단 DRAM 노드에서의 온디바이스 ADI 오버레이 측정</div>
+          <div class="paper-meta">
+            <div class="meta-tag">CFE · DRAM · ADI 오버레이</div>
+          </div>
+        </div>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- ===================== SESSION 12 ===================== -->
+  <div class="section-group">
+    <div class="section-header">
+      <span class="section-badge">Session 12</span>
+      <span class="section-title">OCD 계측 및 EUV 얼라인먼트 전략</span>
+      <span class="section-count">3편</span>
+    </div>
+    <div class="paper-list">
+
+      <a class="paper-card" href="S12_1. OCD_시뮬레이션_도메인_최적화_한국어번역.html">
+        <div class="paper-num">S12-1</div>
+        <div class="paper-body">
+          <div class="paper-title-kr">머신러닝 기반 OCD 계측의 역문제 해결을 위한 광학 계측 시뮬레이션 도메인 최적화</div>
+          <div class="paper-meta">
+            <div class="meta-tag">OCD · ML · 시뮬레이션 도메인</div>
+          </div>
+        </div>
+      </a>
+
+      <a class="paper-card" href="S12_2. Beyond_Overlay_구조파라미터_한국어번역.html">
+        <div class="paper-num">S12-2</div>
+        <div class="paper-body">
+          <div class="paper-title-kr">오버레이를 넘어서: 광학 오버레이 계측에서 추출한 추가 구조 파라미터</div>
+          <div class="paper-meta">
+            <div class="meta-tag">광학 계측 · 구조 파라미터 · Beyond Overlay</div>
+          </div>
+        </div>
+      </a>
+
+      <a class="paper-card" href="S12_4. EUV_얼라인먼트마크_차폐전략_발표전사문_번역.html">
+        <div class="paper-num">S12-4</div>
+        <div class="paper-body">
+          <div class="paper-title-kr">다층 EUV 스택에서의 얼라인먼트 마크 차폐 전략</div>
+          <div class="paper-meta">
+            <div class="meta-tag transcript">📝 발표 전사문</div>
+            <div class="meta-tag">EUV · 얼라인먼트 마크 · 차폐 전략</div>
+          </div>
+        </div>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- ===================== 기타 ===================== -->
+  <div class="section-group">
+    <div class="section-header">
+      <span class="section-badge">기타</span>
+      <span class="section-title">공정 제어 및 AI 응용</span>
+      <span class="section-count">2편</span>
+    </div>
+    <div class="paper-list">
+
+      <a class="paper-card" href="S기타_1. DSM_다이워피지오버레이제어_한국어번역.html">
+        <div class="paper-num">기타-1</div>
+        <div class="paper-body">
+          <div class="paper-title-kr">다이 스트레스 관리(DSM)를 활용한 다이 워피지 및 오버레이 제어</div>
+          <div class="paper-meta">
+            <div class="meta-tag">DSM · 다이 워피지 · 오버레이 제어</div>
+          </div>
+        </div>
+      </a>
+
+      <a class="paper-card" href="S기타_2. 포토리소그래피_수율최대화_HITL_AI_한국어번역.html">
+        <div class="paper-num">기타-2</div>
+        <div class="paper-body">
+          <div class="paper-title-kr">포토리소그래피 수율 사전적 최대화 — HITL AI 접근법</div>
+          <div class="paper-meta">
+            <div class="meta-tag">포토리소그래피 · HITL · AI · 수율</div>
+          </div>
+        </div>
+      </a>
+
+    </div>
+  </div>
+
 </main>
-<footer class="site-footer">AUROS 인턴십 논문 번역 아카이브 · JCha69/Auros-intern · GitHub Pages</footer>
+
+<footer class="site-footer">
+  반도체 논문 한국어 번역 아카이브 · AUROS 인턴십 · 2026
+</footer>
+
 </body>
 </html>
