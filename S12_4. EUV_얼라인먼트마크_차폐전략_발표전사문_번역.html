@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>다층 EUV 스택에서의 얼라인먼트 마크 차폐 전략 - 발표자 전사문 한국어 번역</title>
+<style>
+body {
+  font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;
+  font-size: 13px; line-height: 1.6;
+  color: #111; background: #f5f5f5; margin: 0; padding: 0;
+}
+.container {
+  max-width: 860px; margin: 0 auto; background: #fff;
+  padding: 36px 50px; box-shadow: 0 2px 14px rgba(0,0,0,0.09);
+}
+h1 { font-size:1.28em; font-weight:700; color:#1a237e;
+  border-bottom:2px solid #1a237e; padding-bottom:9px;
+  margin-bottom:6px; line-height:1.45; }
+h2 { font-size:1.05em; font-weight:700; color:#283593;
+  margin-top:26px; margin-bottom:7px;
+  border-left:4px solid #3949ab; padding-left:9px; }
+h3 { font-size:0.96em; font-weight:700; color:#37474f;
+  margin-top:18px; margin-bottom:5px; }
+h4 { font-size:0.90em; font-weight:700; color:#455a64;
+  margin-top:14px; margin-bottom:4px; }
+.meta { font-size:0.83em; color:#555; margin-bottom:3px; }
+.abstract-box {
+  background:#e8eaf6; border-left:4px solid #3949ab;
+  padding:12px 16px; margin:16px 0; border-radius:0 5px 5px 0; }
+.abstract-box .label {
+  font-weight:700; color:#1a237e; font-size:0.93em; margin-bottom:7px; }
+.keyword-box {
+  background:#f3f4f6; border:1px solid #c5cae9;
+  padding:7px 13px; border-radius:4px;
+  margin:7px 0 16px 0; font-size:0.83em; }
+p { margin:0 0 9px 0; text-align:justify; }
+.fig-box {
+  margin:18px 0; border:1px solid #c5cae9;
+  border-radius:5px; overflow:hidden; background:#fafafa; }
+.fig-box img { width:100%; display:block; }
+.fig-caption {
+  padding:8px 13px; font-size:0.81em; color:#333;
+  background:#eef0fb; border-top:1px solid #c5cae9; line-height:1.5; }
+.fig-caption strong { color:#1a237e; }
+.note-box {
+  background:#fff8e1; border-left:3px solid #f9a825;
+  padding:9px 13px; margin:12px 0;
+  border-radius:0 4px 4px 0; font-size:0.84em; }
+.note-box .label { font-weight:700; color:#e65100; margin-bottom:4px; }
+.transcript-box {
+  background:#f0f7ff; border:1px solid #90caf9;
+  border-radius:6px; padding:12px 16px;
+  margin:14px 0; font-size:0.84em; color:#0d1a2d; }
+.transcript-box .label {
+  font-weight:700; color:#0d47a1; margin-bottom:6px; font-size:0.9em; }
+table {
+  width:100%; border-collapse:collapse;
+  margin:12px 0; font-size:0.83em; }
+th { background:#3949ab; color:#fff; padding:5px 9px; text-align:center; }
+td { border:1px solid #c5cae9; padding:4px 9px; }
+tr:nth-child(even) td { background:#f3f4f6; }
+.term { font-style:italic; color:#1565c0; }
+.section-divider { border:none; border-top:1px dashed #c5cae9; margin:22px 0; }
+.toc {
+  background:#f5f5f5; border:1px solid #ddd;
+  padding:11px 16px; border-radius:4px;
+  margin-bottom:20px; font-size:0.84em; }
+.toc .toc-title { font-weight:700; margin-bottom:5px; color:#1a237e; }
+.toc a { color:#283593; text-decoration:none; display:block; padding:1px 0; }
+.toc a:hover { text-decoration:underline; }
+.toc .sub { padding-left:14px; }
+ul, ol { font-size:0.95em; margin:5px 0 9px 0; padding-left:20px; }
+li { margin-bottom:3px; }
+sup { font-size:0.75em; }
+.ref-box {
+  background:#f9f9f9; border:1px solid #ddd;
+  padding:10px 14px; border-radius:4px;
+  font-size:0.80em; line-height:1.55; }
+.ref-box p { margin:0 0 5px 0; }
+.highlight-box {
+  background:#e8f5e9; border-left:4px solid #43a047;
+  padding:9px 13px; margin:12px 0;
+  border-radius:0 4px 4px 0; font-size:0.88em; }
+.highlight-box .label { font-weight:700; color:#1b5e20; margin-bottom:4px; }
+.result-box {
+  background:#fce4ec; border:1px solid #f48fb1;
+  border-radius:5px; padding:10px 14px; margin:14px 0;
+  font-size:0.86em; }
+.result-box .label { font-weight:700; color:#880e4f; margin-bottom:5px; }
+.scheme-box {
+  background:#e3f2fd; border:1px solid #90caf9;
+  border-radius:5px; padding:10px 14px; margin:14px 0;
+  font-size:0.86em; }
+.scheme-box .label { font-weight:700; color:#0d47a1; margin-bottom:5px; }
+.timestamp {
+  display:inline-block; background:#3949ab; color:#fff;
+  font-size:0.78em; font-weight:700; padding:2px 8px;
+  border-radius:10px; margin-bottom:6px; letter-spacing:0.03em;
+}
+.original-text {
+  background:#f9f9fb; border-left:3px solid #9fa8da;
+  padding:7px 12px; margin:6px 0 10px 0;
+  font-size:0.82em; color:#555; font-style:italic;
+  border-radius:0 4px 4px 0;
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <h1>다층 EUV 스택에서의 얼라인먼트 마크 차폐 전략<br>— 반사 및 결합 간섭 완화</h1>
+  <p class="meta"><strong>원제:</strong> Shielding Strategies for Alignment Marks in Multilayer EUV Stacks: Mitigating Reflection and Coupling Interference</p>
+  <p class="meta"><strong>자료 유형:</strong> 발표자 전사문 (Presenter Transcript) — PDF 원본 논문 없음</p>
+  <p class="meta"><strong>번역:</strong> 전사문 전체 한국어 번역 (타임스탬프 기준 섹션 구분)</p>
+
+  <div class="toc">
+    <div class="toc-title">목차</div>
+    <a href="#intro">00:00 — 서론 및 발표 개요</a>
+    <a href="#challenge">00:32 — 선단 리소그래피(Leading-Edge Litho)의 과제</a>
+    <a href="#taxonomy">01:25 — 차폐 분류 체계(Taxonomy of Shielding)</a>
+    <a href="#sensor">02:12 — 얼라인먼트 센서와 밀도 설계 규칙</a>
+    <a href="#topography">03:31 — 스크라이브 라인 토포그래피 문제</a>
+    <a href="#shielding-types">05:02 — 차폐 유형 분류 (차단·더미·방향성 쵸핑)</a>
+    <a href="#sensitivity">06:41 — 오버레이 민감도 시뮬레이션</a>
+    <a href="#parametric">08:27 — 파라미터 폭발 문제와 시뮬레이션 생태계</a>
+    <a href="#tree">10:00 — 트리 다이어그램: 레이어별 처리 전략</a>
+    <a href="#frontside">11:14 — 전면(Front-side) 사용 사례: 게이트 및 로컬 인터커넥트 차폐</a>
+    <a href="#cavity">13:52 — 광학 공동(Optical Cavity) 문제와 백사이드 리소그래피</a>
+    <a href="#blocking">15:23 — 블로킹 레이어 및 크로스-폴라라이저 차폐</a>
+    <a href="#yieldstar">17:20 — 오버레이 계측(YieldStar) 적용</a>
+    <a href="#conclusion">18:49 — 결론 및 권고사항</a>
+  </div>
+
+  <div class="abstract-box">
+    <div class="label">발표 요약</div>
+    <p>이 발표는 다층 EUV 스택 환경에서 얼라인먼트 마크(Alignment Mark)가 주변 레이어 및 필름과 어떻게 상호작용하는지를 다룹니다. 발표자는 차폐(Shielding), 더미 패턴(Dummy Pattern), 블로킹 레이어(Blocking Layer) 등의 분류 체계를 소개하고, 검출 가능성(Detectability), 공정 변동(Process Variation), 광학 공동(Optical Cavity) 문제에 대한 시뮬레이션 결과를 제시합니다. 1nm 노드 로직 모크업 디바이스를 사례로 D4C 시뮬레이션 소프트웨어를 활용한 최적화 방향을 제안합니다.</p>
+  </div>
+
+  <div class="keyword-box">
+    <strong>주요 키워드:</strong>
+    얼라인먼트 마크(Alignment Mark), 차폐 전략(Shielding Strategy), EUV 리소그래피(EUV Lithography), 오버레이(Overlay), 광학 공동(Optical Cavity), 토포그래피(Topography), 평탄화(Planarization), 검출 가능성(Detectability), 스크라이브 라인(Scribe Line), 오리온 센서(Orion Sensor), 크로스-폴라라이저(Cross-Polarizer)
+  </div>
+
+  <hr class="section-divider">
+
+  <h2 id="intro">00:00 — 서론 및 발표 개요</h2>
+
+  <div class="transcript-box">
+    <div class="label">발표자 전사문 한국어 번역</div>
+  </div>
+
+  <span class="timestamp">00:00</span>
+  <p>
+    청중 여러분의 관심에 정말 감사드립니다. 오늘 발표를 하게 되어 기쁩니다. 포인터가 작동하는지 한번 확인해 볼게요. 네, 공동 저자 여러분께 감사드리고, <span class="term">차폐 전략(Shielding Strategy)</span>에 관한 발표를 하게 되어 매우 기쁩니다. 이 발표는 우리의 얼라인먼트 센서(Alignment Sensor)가 얼라인먼트 마크(Alignment Mark) 위아래에 있는 레이어, 필름, 패턴과 어떻게 상호작용하는지를 다룹니다.
+  </p>
+  <div class="original-text">Yeah so I'm so thankful for you guys' attention. And I'm excited to present today... So I'm thankful for my co-authors and I'm really excited to present on shielding strategy. So this is an interaction of how our alignment sensor works with the layers and films and patterns above and below alignment marks.</div>
+
+  <hr class="section-divider">
+
+  <h2 id="challenge">00:32 — 선단 리소그래피의 과제</h2>
+
+  <span class="timestamp">00:32</span>
+  <p>
+    먼저 선단 리소그래피(<span class="term">Leading-Edge Litho</span>)와 관련된 과제를 다루겠습니다. "내 샘플은 얼마나 평탄한가?"라는 질문과 함께, 얼라인먼트 마크 설계와 마크 위아래 레이어를 어떻게 설계해야 하는지의 문제가 있습니다. 이 두 요소는 서로 강하게 상호작용합니다. 구조물의 설계는 디바이스의 토포그래피(Topography) 변화와 깊이 연관되어 있으며, 이는 다시 밀도 또는 평탄화(<span class="term">Planarization</span>) 공정과 상호작용합니다.
+  </p>
+  <div class="original-text">So we're going to address challenges related to leading edge litho. In how flat is my sample I need to design alignment marks and design the layers above and below the marks. These interact strongly. The design of those structures interacts strongly with the topography evolution of the device, and that is interacting with the density or the planarization processes.</div>
+
+  <hr class="section-divider">
+
+  <h2 id="taxonomy">00:55 — 차폐 분류 체계 소개</h2>
+
+  <span class="timestamp">00:55</span>
+  <p>
+    설계 단계에서 저는 <span class="term">차폐의 분류 체계(Taxonomy of Shielding)</span>를 소개하려 합니다. 이 구조들을 어떻게 명명하고, 차폐(Shield), 더미 패턴(Dummy Pattern), 블로킹 레이어(Blocking Layer)가 각각 무엇을 의미하는지 명확하고 정확한 언어로 소통하는 방법에 대해 이야기하겠습니다. 또한 이러한 요소들이 계측(Metrology)의 정확도와 견고성, 즉 <span class="term">검출 가능성(Detectability)</span>과 <span class="term">공정 변동(Process Variation)</span>에 어떻게 영향을 미치는지, 그리고 마크에서 얼마나 많은 신호를 얻을 수 있는지를 소개할 것입니다.
+  </p>
+  <div class="original-text">In the design I want to introduce the taxonomy of shielding. How do we name these structures and make sure that we have clear and accurate language to communicate. What do we mean by a shield or a dummy pattern or a blocking layer. I'll introduce these detectability and process variation interactions with the accuracy and the robustness of the metrology, as well as how much signal can we get out of a mark.</div>
+
+  <span class="timestamp">01:25</span>
+  <p>
+    <span class="term">파라미터 폭발(Parametric Explosion)</span> 문제는 매우 중요합니다. 작은 정수들을 곱하다 보면 수백만 건의 시뮬레이션이 필요하게 될 수도 있어 다소 압도적으로 느껴집니다. 우리는 이러한 시뮬레이션들을 수행했고, 그 생태계를 발표에서 소개할 것입니다. 또한 1nm 노드 로직 모크업 디바이스(<span class="term">1 Nanometer Node Logic Mockup Device</span>)를 사례로 제시하겠습니다.
+  </p>
+  <div class="original-text">There is these parametric explosions that are very important for us to understand... If you start multiplying a large list of small integers, you can end up with millions of simulations needed. And we've gone through those simulations and I'll present that ecosystem. We're going to present a 1 nanometer node logic mockup device.</div>
+
+  <span class="timestamp">01:48</span>
+  <p>
+    D4C(Design for Control) 시뮬레이션 소프트웨어를 사용하여 공정, 리소그래피, 센서를 시뮬레이션할 수 있는 예시 사례를 보여드리겠습니다. 권고사항을 제시하고 결론을 맺겠습니다. 스캐너에는 계측 측(Measure Side)이 있으며, 거기서 얼라인먼트 센서(Alignment Sensor)가 얼라인먼트 마크의 위치를 추정합니다.
+  </p>
+  <div class="original-text">So kind of an example case where we simulate using the D4. See the design for control simulation software where we can simulate the process the lithography and the sensor. I'll make some recommendations and conclude. So just in case you don't there's a measure side of the scanner. And there the alignment sensor is estimating the positions of alignment marks.</div>
+
+  <hr class="section-divider">
+
+  <h2 id="sensor">02:12 — 얼라인먼트 센서와 밀도 설계 규칙</h2>
+
+  <span class="timestamp">02:12</span>
+  <p>
+    이 마크들은 디바이스의 <span class="term">스크라이브 라인(Scribe Line)</span>에 배치됩니다. 확대해 보면 스크라이브 라인 안에 얼라인먼트 마크 예시가 있는 것을 볼 수 있습니다. 여기에 <span class="term">오리온(Orion)</span> 계측 결과가 있습니다. 오리온 센서, 즉 얼라인먼트 센서입니다. 과거에는 4색 측정을 사용했지만, 최근에는 적외선 영역까지 12색 측정으로 확장되었습니다. 이는 밀도 설계 규칙(Density Design Rules)과도 관련이 있습니다.
+  </p>
+  <div class="original-text">These marks are placed into the scribe lines of the device... Here is the Orion measurement. So this is the Orion sensor the alignment sensor. And we used to have a four color measurement. And recently we've gone to a 12 color measurement going into the infrared. So this does come to the density design rules.</div>
+
+  <span class="timestamp">02:38</span>
+  <p>
+    레이아웃의 몇 퍼센트를 패턴으로 덮어야 하는지의 문제는 평탄도, 연마(Polish), 슬러리 물리(Slurry Physics), 평탄화 길이 척도 등과 강하게 상호작용합니다. 이는 연마 후 샘플이 얼마나 평탄한가와 직결되며, 결국 <span class="term">심도(Depth of Focus)</span>에 영향을 미칩니다. 리소그래피를 위해서는 평탄한 샘플이 필요합니다.
+  </p>
+  <div class="original-text">What fraction of the layout must be covered by patterns. This has strong interactions of course, like I mentioned with the planarity, the Polish, the slurry physics, the planarization length scales drive interactions with how flat is my sample after Polish.</div>
+
+  <span class="timestamp">03:04</span>
+  <p>
+    레티클(Reticle)의 얼마나 많은 부분이 열려 있는지도 웨이퍼 가열(Wafer Heating), 플레어(Flare), 레티클 투과율(Reticle Transmission), 거울 가열(Mirror Heating) 등 수많은 영향을 미칩니다. 에피택시(Epitaxy), 식각(Etch), 박막 응력(Thin Film Stress), 패키징 물리, 어닐링(Annealing) 물리 등 이 모든 것들이 패턴 커버리지에 의해 결정됩니다.
+  </p>
+  <div class="original-text">What fraction of the reticle is open has many, many implications in wafer heating and flare, the reticle transmission and the mirror heating... All of these things are driven by the fractional coverage.</div>
+
+  <hr class="section-divider">
+
+  <h2 id="topography">03:31 — 스크라이브 라인 토포그래피 문제</h2>
+
+  <span class="timestamp">03:31</span>
+  <p>
+    마크가 디바이스와 유사할수록, 설계한 공정을 더 잘 반영하게 됩니다. 이 모든 물리를 이해하려면 빠른 시뮬레이터와 빠른 계측 시스템이 필요합니다. 다행히 우리는 둘 다 갖추고 있습니다. <span class="term">스크라이브 라인 토포그래피(Scribe Line Topography)</span> 문제는 정확도와 디바이스 수율 측면에서 매우 심각합니다.
+  </p>
+  <div class="original-text">The more device like my mark is, will make it behave more the way I'm designing my process in the first place... this scribe line topography challenge is very acute for the accuracy and the device yield.</div>
+
+  <span class="timestamp">04:04</span>
+  <p>
+    이 AFM 이미지 예시에서, 작은 십자 구조 주변에 채움(Fill) 패턴이 있는 경우와 십자 구조만 홀로 있는 경우를 비교하면, 6마이크로미터 거리에 걸쳐 5나노미터의 토포그래피 차이가 발생할 수 있습니다. 이 미묘한 토포그래피 변화는 메소스케일(Mesoscale)에서 해당 레이어의 패턴 유무에 의해 발생합니다.
+  </p>
+  <div class="original-text">In this example AFM image, you can see a filled pattern where I have fill around my little cross structure. Or if I have a lonely cross by itself, I might have 5 nanometers of topography over 6 micrometers of distance...</div>
+
+  <span class="timestamp">04:33</span>
+  <p>
+    밀도 이상값이 있는 테스트 칩에서 30나노미터의 필드 스케일 토포그래피가 발생한 사례가 있습니다. 즉, 첫 번째 레이어에 얼라인먼트 마크를 놓고 두 번째 레이어의 스크라이브 라인에 아무것도 없으면 토포그래피 손상이 발생합니다. 차폐 없음(No Shielding)은 스크라이브 라인의 강한 토포그래피 문제 및 디바이스 수율에 영향을 미칩니다.
+  </p>
+  <div class="original-text">Here's a test chip where we had some test dye that had some density outliers. And in this example, we had 30 nanometers of field scale topography from this density excursion dye. So what this means is that if I put down an alignment mark and my device on my first layer, if on my second layer I don't have anything in my scribe line, I will have topography damage.</div>
+
+  <hr class="section-divider">
+
+  <h2 id="shielding-types">05:02 — 차폐 유형 분류</h2>
+
+  <span class="timestamp">05:02</span>
+  <p>
+    스크라이브 라인의 내용물이 디바이스를 제대로 대표하지 않으면 공정 제어에 실질적인 문제가 생깁니다. 차폐의 분류 체계를 살펴보겠습니다. 레이어 1에 얼라인먼트 그레이팅(Alignment Grating)이 있다고 가정하겠습니다. 레이어 2에서는 세 가지 선택이 있습니다:
+  </p>
+  <ul>
+    <li><strong>블로킹(Blocking):</strong> 큰 금속 시트를 덮는 방식. 공정 친화적이지 않을 수 있지만 이유가 있을 수 있음.</li>
+    <li><strong>공백(Blank):</strong> 아무것도 놓지 않는 방식.</li>
+    <li><strong>비-스캐닝 방향 쵸핑(Non-Scanning Direction Chops):</strong> X 방향으로 스캔할 때 수평선을 놓으면, 그 선의 위치가 얼라인먼트 신호에 오버레이 측면에서 영향을 주지 않음.</li>
+  </ul>
+  <div class="original-text">Let's go through the taxonomy of shielding here... on layer 2 I have to make a decision. I could put a blocking like a big sheet of metal... I could put nothing and it would be blank, or I could put non-scanning direction chops.</div>
+
+  <span class="timestamp">05:56</span>
+  <p>
+    수평선의 위상(Phase)은 광학 신호에 영향을 주지 않습니다. 반면 스캔 방향과 같은 방향의 쵸핑, 즉 <span class="term">스캐닝 방향 쵸핑(Scanning Direction Chops)</span>은 마크와 같은 방향이기 때문에 크로스토크(Crosstalk)를 일으킬 수 있습니다. 이 경우는 위험 요소가 됩니다. 피치(Pitch)가 충분히 촘촘하다면 영향이 적을 수도 있습니다. 블로킹은 큰 광학 공동(Optical Cavity)을 차단하거나 공간을 재활용해 또 다른 광학 그레이팅을 놓을 때 유용합니다.
+  </p>
+  <div class="original-text">So the phase of these lines doesn't care. It doesn't interact with the optical signals that I get out of my alignment scan. But if I have scanning chops in this direction... those would cause crosstalk. So this case here is actually a risk.</div>
+
+  <hr class="section-divider">
+
+  <h2 id="sensitivity">06:41 — 오버레이 민감도 시뮬레이션</h2>
+
+  <span class="timestamp">06:41</span>
+  <p>
+    스캐닝 방향 쵸핑의 위치를 변경하면 꽤 큰 범위를 보여줍니다. 마크 아래의 차폐를 이동시키면 마크가 실제로 움직이지 않음에도 불구하고 5나노미터의 겉보기 위치 변화(Apparent Position Change)가 발생할 수 있습니다. 이것은 시뮬레이션 결과이며, <span class="term">오버레이 민감도(Overlay Sensitivity)</span>가 나노미터당 0.25나노미터까지 달할 수 있습니다.
+  </p>
+  <div class="original-text">So if I change the position of the scanning direction chops you can see this is a fairly large range. But if I move the shield below this mark, I can have a 5 nanometer apparent position change, even though the mark is not actually moving... sensitivities to overlay up to a quarter nanometer per nanometer.</div>
+
+  <span class="timestamp">07:08</span>
+  <p>
+    이것은 한 편광(Polarization)에서만의 결과이며, 다른 편광에서는 완전히 평탄합니다. 즉, 스캐닝 방향 쵸핑으로 인해 설계 비대칭(Asymmetry)이 발생합니다. TEM 이미지와 실험 데이터를 보면, 차폐가 없는 마크에서 X축은 X 편광의 신호 강도(Wafer Quality), Y축은 Y 편광의 신호 강도를 나타냅니다.
+  </p>
+  <div class="original-text">And this is just in one polarization. The other polarization is all flat. So this means that I end up with asymmetries in my design from these scanning direction chops.</div>
+
+  <span class="timestamp">07:34</span>
+  <p>
+    SC(스캐닝) 방향으로 차폐를 추가하면 한 편광은 품질이 높아지지만 다른 방향은 낮아집니다. 반대 방향으로 차폐를 추가하면 반대 현상이 나타납니다. 접촉 차폐(Contact Shields)는 비교적 대칭적이며 편광을 크게 왜곡하지 않습니다. 편광 효과, 마크 설계, 비대칭 모드 간의 강한 상호작용이 존재합니다.
+  </p>
+  <div class="original-text">If I add shields in the SC direction I increase one polarization but the other direction goes down in quality. And if I put shields in the other direction they go the other way. And contact shields are kind of symmetric. They're not very polarizing.</div>
+
+  <span class="timestamp">08:00</span>
+  <p>
+    두 가지 서로 다른 위상에서 나노미터당 0.1~0.2나노미터의 민감도가 발생할 수 있습니다. 두 레이어 스택에서 최소 설계 규칙, 최대 간격 규칙, 최소 밀도 규칙을 고려해야 합니다. 최소 CD 규칙과 함께 이것들이 실질적인 제약 조건이며, 매우 고차원적인 공간에서 탐색이 필요합니다.
+  </p>
+  <div class="original-text">Again these SC directions here. Again, this is two different phases. I can end up with large 0.1 or 0.2 nanometer sensitivities for each nanometer of phase.</div>
+
+  <hr class="section-divider">
+
+  <h2 id="parametric">08:27 — 파라미터 폭발 문제와 시뮬레이션 생태계</h2>
+
+  <span class="timestamp">08:27</span>
+  <p>
+    탐색 과정에서 차폐와 마크의 세그먼트화(Segmentation), 웨이퍼에 놓을 패턴 종류, 합법적 설계 밀도 공간에서의 탐색이 검출 가능성에 미치는 영향을 평가합니다. 특히 <span class="term">본딩(Bonding)</span> 경우에서 마크 아래에 공진 공동(Resonant Cavity)이 있으면 강한 상호작용이 발생합니다.
+  </p>
+  <div class="original-text">As I search I'm going to evaluate how do I segment my shield in my mark... especially in these bonding cases, if I have a resonant cavity below my mark, I can have a lot of interaction there.</div>
+
+  <span class="timestamp">09:00</span>
+  <p>
+    리소그래피 시뮬레이션으로 이 공간에 접근할 수 있습니다. 예를 들어 3가지 피치, 5가지 세그먼트화, 5가지 듀티 사이클, 차폐에서 3가지 유형, 5가지 피치, 1~2가지 비대칭 모드를 곱하면 500만 건의 시뮬레이션이 필요합니다. 이는 <span class="term">D4C 소프트웨어(D4C Software)</span>로 수행되며, 마크 설계, 공정 흐름, 분산 및 광학 데이터가 하나의 생태계에서 통합됩니다.
+  </p>
+  <div class="original-text">And if you start again, like I said multiplying small integers... I can come up with 5 million simulations that I need to do and interpret... This is done with this de Fauci software where I can build up my design of my mark. I have my process flow, and I have my dispersion and optical data all in one ecosystem.</div>
+
+  <hr class="section-divider">
+
+  <h2 id="tree">10:00 — 트리 다이어그램: 레이어별 처리 전략</h2>
+
+  <span class="timestamp">10:00</span>
+  <p>
+    이 예시에서는 모든 마크를 액티브(Active) 레이어에 배치합니다. 스택의 각 레이어를 색으로 구분합니다:
+  </p>
+  <ul>
+    <li><strong>보라색(Purple):</strong> 검사 포인트(Inspection Point) — 백사이드 비아(Backside Via) 사례. 샘플 평탄도에 신경 쓰지 않아도 되는 지점.</li>
+    <li><strong>초록색(Green):</strong> 차폐(Shield) — 신호가 통과하도록 엔지니어링하는 레이어.</li>
+    <li><strong>빨간색(Red):</strong> 블로킹(Blocking) — 신호를 차단하도록 엔지니어링하는 레이어.</li>
+  </ul>
+  <div class="original-text">So I'm going to put all my marks in active for this example. And I'm going to color each layer in the stack with what I'm going to do with that layer... inspection point in purple... shields are in green... in red. It means I'm engineering a layer there that I want to block the signal.</div>
+
+  <span class="timestamp">10:28</span>
+  <p>
+    백사이드 비아 사례에서, 백엔드 오브 라인(Back-End of Line) 멀리에서 검사하는 경우를 시뮬레이션합니다. 첫 두 금속 레이어에 블로킹을 놓고, 게이트 접점(Gate Contact)은 공백으로 두며, 로컬 인터커넥트(Local Interconnect)와 게이트(Gate)에서는 차폐를 적용합니다.
+  </p>
+  <div class="original-text">So in this backside example I'm going to be inspecting from the backside the far back end of line... I put blocking in my first two metal layers. My gate contact is empty and I'm shielding in the local interconnect and the gate.</div>
+
+  <hr class="section-divider">
+
+  <h2 id="frontside">11:14 — 전면 사용 사례: 게이트 및 로컬 인터커넥트 차폐</h2>
+
+  <span class="timestamp">11:14</span>
+  <p>
+    전면(Front-Side) 사용 사례에서 실제로 차폐가 가능합니다. 차폐가 없는 마크(Yellow-Yellow)는 토포그래피 측면에서 문제가 될 수 있습니다. 게이트만 차폐하면 1D 공간이 됩니다. 매우 작은 게이트 CD는 설계 규칙 위반이고, CD가 커질수록 <span class="term">신호 강도(Signal Intensity)</span>가 낮아집니다. 이는 질화티타늄(TiN) 게이트 레이어가 빛을 차단하기 때문입니다.
+  </p>
+  <div class="original-text">So let me go to a much simpler example and show some simulations and say that for the front side use cases, we really can shield... If I shield just the gate, I end up with this 1D space... my signal intensity goes down.</div>
+
+  <span class="timestamp">11:42</span>
+  <p>
+    50나노미터 피치, 20나노미터 CD에서 웨이퍼 품질(Wafer Quality) 3~4%는 매우 좋은 범위에 해당합니다. 게이트 차폐로 쉽게 검출 가능합니다. 로컬 인터커넥트와 게이트 차폐를 모두 적용하면 2D 공간이 생기고 두 가지 금지 구역(No-Go Zone)이 생깁니다.
+  </p>
+  <div class="original-text">But if I look at a 50 nanometer pitch, 20 nanometer CD, I still have a wafer quality of 3% or 4% which is in the very good range. So I have easy detectability with the gate shield... I have a two dimensional space and now I have two no go zones.</div>
+
+  <span class="timestamp">12:15</span>
+  <p>
+    텅스텐(Tungsten)과 TiN이 마크 위에 있을 때 CD가 너무 크면 더 이상 신호가 통과하지 못합니다. 이는 양쪽 레이어를 모두 차폐할 때 공정 마진(Process Margin)이 실제로 존재함을 보여줍니다. 게이트와 로컬 인터커넥트에서 평탄한 샘플을 만들 수 있다면 게이트 접점이 더 잘 작동하게 되며, 이는 EUV, 하이-NA(High-NA) 리소그래피에서 특히 중요합니다.
+  </p>
+  <div class="original-text">if the CDs get big enough, I can't see through anymore... there is actually a process margin for shielding both layers. So if I can make flatter samples at gate and at local interconnect, that will allow my gate contacts to work better because I need the sample to be flat, especially if we're going to use EUV or high Na or I think I'm optimistic now about going even higher in the Na.</div>
+
+  <span class="timestamp">12:50</span>
+  <p>
+    차폐의 피치를 변경하면 최적의 마크 설계가 달라질 수 있습니다. 50nm 피치 차폐에 최적화하면 파인(Fin) 또는 나노시트(Nanosheet) 레이어에서 더 큰 CD가 필요합니다. 더 큰 차폐 피치를 사용하면 신호 강도를 극대화하기 위해 마크 자체의 CD를 약간 줄이는 게 유리할 수 있습니다.
+  </p>
+  <div class="original-text">If you change the pitch of these shields, the optimum mark might change. So in this example, we optimized for a 50 pitch shield... that demands this larger CD in my actual fin or in my nanosheet layer. But if I go to a larger shielding pitch, I might prefer a slightly larger and smaller.</div>
+
+  <hr class="section-divider">
+
+  <h2 id="cavity">13:52 — 광학 공동 문제와 백사이드 리소그래피</h2>
+
+  <span class="timestamp">13:23</span>
+  <p>
+    마크 설계와 차폐 설계 사이의 이러한 흥미로운 상호작용이 존재하며, 이는 다시 탐색이 필요한 고차원 공간으로 이어집니다. 이제 공동(Cavity) 문제를 살펴보겠습니다. 차폐가 전혀 없는 최대 난이도 사례입니다. 마크 아래에 광학적으로 투명한 산화물 레이어가 수 마이크로미터 두께로 있고, 마크는 표면에 있으며 이제 백사이드 공정(Backside Process)을 수행합니다.
+  </p>
+  <div class="original-text">So now let's go to the cavity case. So again, now I have the full challenge case of no shielding... basically micrometers of optical transparent material oxide below my mark. My mark is at the surface. Now in my backside process.</div>
+
+  <span class="timestamp">13:52</span>
+  <p>
+    파장과 광학 공동 두께에 따라 강하게 진동하는 광학 신호가 나타납니다. 이 <span class="term">영(Null) 지점</span>에서는 신호가 없으며, <span class="term">APD(Apparent Position Deviation)</span> 또는 배치 오차(Placement Error) 추정값이 폭발적으로 증가합니다. 마크에 2나노미터의 CD 불균형(CD Imbalance)만 있어도 15나노미터 이상의 배치 오차가 발생할 수 있으며, 이는 변동성이 큽니다.
+  </p>
+  <div class="original-text">I have strongly oscillating optical signal. And so I have these nulls. And when these nulls happen where there's no signal, I have these explosions in my APD or my placement or my accuracy estimate. So I put a very small CDA symmetry. So there's a little bit of asymmetry in the mark of only two nanometers. But then that can explode up to 15 nanometers or more of placement error.</div>
+
+  <span class="timestamp">14:37</span>
+  <p>
+    이것은 정확한 얼라인먼트를 위한 광학 레시피를 만들기 매우 어려운 상황입니다. 차폐를 놓지 않으면 이 상황이 발생합니다. 이제 로컬 인터커넥트와 게이트 차폐를 적용해 보겠습니다.
+  </p>
+  <div class="original-text">And so this is a very difficult situation to make an optical recipe that would give me accurate alignment... So here's the stack, here's the simulation and here's the tree. So let's go through a few iterations like that. So now I'm going to put in shields on the local interconnect AND gate alone.</div>
+
+  <span class="timestamp">14:57</span>
+  <p>
+    로컬 인터커넥트와 게이트에 차폐를 적용하면, 한 편광은 훨씬 안정적이 되고 광학 두께에 따른 스윙 곡선(Swing Curve)도 더 안정적입니다. 허용 가능한 품질을 얻습니다. 그러나 한 편광은 여전히 공동 두께에 따라 진동하며, 나머지 편광은 여전히 문제가 있습니다.
+  </p>
+  <div class="original-text">One of the polarizations is now much quieter. And I have a more stable swing curve through optical thickness. And I have acceptable quality. But there's still oscillating with these cavity thickness. And this is still a challenging situation.</div>
+
+  <hr class="section-divider">
+
+  <h2 id="blocking">15:23 — 블로킹 레이어 및 크로스-폴라라이저 차폐</h2>
+
+  <span class="timestamp">15:23</span>
+  <p>
+    M0(Metal 0) 또는 M2(Metal 2)까지 마크를 계속 사용하고 싶다면, 한 편광 상태만 좋은 품질을 보이고 전체 스펙트럼 범위에서 안정적인 스윙 곡선을 가지게 됩니다. 다른 편광은 여전히 노이즈가 많습니다.
+  </p>
+  <div class="original-text">So now I have one polarization state that has still good quality and I have a very stable swing curve through thickness, so this is good. The other polarization is still noisy though...</div>
+
+  <span class="timestamp">15:56</span>
+  <p>
+    M2에서 이 마크를 더 이상 사용하지 않기로 결정하고 블로킹을 추가한다면, 즉 <span class="term">크로스-폴라라이저 차폐(Cross-Polarizer Shield)</span> 또는 블로킹 레이어를 적용하면, 두 편광을 모두 회복하고 평탄한 스펙트럼 응답을 얻을 수 있습니다. 이로써 두꺼운 광학 공동 레이어로부터 완전히 차단됩니다.
+  </p>
+  <div class="original-text">However, if I give up on using this market M2... and I put in blocking, I put in a cross, polarizer, shield or blocking layer. It's a special type of shield that's designed to block the signal. And now I can recover both polarizations. And now I have both polarizations and flat spectral response. And I've basically insulated myself fully from the layers, from that thick optical layer, that thick optical cavity below my mark.</div>
+
+  <span class="timestamp">16:56</span>
+  <p>
+    여전히 스윙 곡선이 존재합니다. 2나노미터의 프로그래밍된 CD 불균형이 있으며, 여전히 일부 파장이 신호를 증폭시킵니다. 복잡성은 여전히 있지만, 이제 아래에 있는 레이어들의 두께 변동으로부터 자신을 완전히 차단했습니다. Metal 15 등 아래 레이어의 두께 변동이 얼라인먼트 레시피에 영향을 주지 않습니다.
+  </p>
+  <div class="original-text">There still is a swing curve. It was a 2 nanometers of programmed CD imbalance... There's still plenty of complexity and making a recipe for this case, but at least now I've insulated myself from any thickness variability of metal 15 or whatever is down there.</div>
+
+  <hr class="section-divider">
+
+  <h2 id="yieldstar">17:20 — 오버레이 계측(YieldStar) 적용</h2>
+
+  <span class="timestamp">17:20</span>
+  <p>
+    동일한 물리 원리가 <span class="term">YieldStar</span> 오버레이 계측에도 적용됩니다. 동일한 시뮬레이터와 동일한 생태계 요소를 사용합니다. 크로스-폴라라이저 차폐를 금속 레이어에, 차폐를 액티브와 게이트에 적용합니다. 마크는 YieldStar 오버레이 계측에 사용됩니다.
+  </p>
+  <div class="original-text">So a lot of the same physics actually applies in the case of the yield star. And we have the same simulator... I've left my cross polarizer shield case in my metals. I have shielding in my active and the gate. And my mark is now in the yield star case and the overlay metrology case.</div>
+
+  <span class="timestamp">17:49</span>
+  <p>
+    두 레이어 모두 패턴이 있고, 액티브에 패턴이 있으며 전면 또는 백사이드 비아 리소그래피에도 패턴이 있습니다. 이 경우 포토레지스트(Photoresist)가 있습니다. 차폐를 하지 않으면 혼돈스러운 스택 민감도와 금속 레이어의 위상 또는 오버레이에 매우 강한 민감도가 발생합니다. 액티브와 게이트에 차폐를 적용하면 아래 금속 레이어로부터 자신을 차단할 수 있습니다.
+  </p>
+  <div class="original-text">Both layers have patterns and I have patterns in my active. And I have patterns on my front side or the back side via litho. So this is photoresist here. And again, if I don't shield, then I can end up with this chaotic stack sensitivity, but also very strong sensitivity to the phase or overlay of these metal layers. So again, if I can shield inactive AND gate, I can insulate myself from the metal below my mask.</div>
+
+  <span class="timestamp">18:19</span>
+  <p>
+    백사이드 사용 사례에서 이 차폐 시나리오를 통해 조용하고 평탄한 스택 민감도를 달성할 수 있습니다. 이것이 이 최종 사례에서 오버레이 계측 품질을 나타내는 YieldStar 지표입니다.
+  </p>
+  <div class="original-text">Now once on these backside use cases and with this shielding scenario here I can quiet and have flat stack sensitivity. That's the yieldstar metric for how well I can measure overlay for this final case.</div>
+
+  <hr class="section-divider">
+
+  <h2 id="conclusion">18:49 — 결론 및 권고사항</h2>
+
+  <span class="timestamp">18:49</span>
+  <p>
+    다소 빠르고 극도로 복잡한 주제였지만 단순화가 가능합니다. 핵심 메시지는 다음과 같습니다: <strong>후속 레이어에서 샘플이 얼마나 평탄한지 신경 쓴다면, 어떤 레이어도 공백으로 두어서는 안 됩니다.</strong> EUV 리소그래피에서는 반드시 그래야 합니다. 샘플 평탄도를 개선하고 계측 마크 설계를 향상시키는 귀중한 전략들이 있습니다.
+  </p>
+  <div class="original-text">So it's a little bit fast and extremely complicated topic, although I think we can simplify it. It's very important not to leave any layer blank if you care about how flat the sample is on subsequent layers. And in EUV lithography we definitely do.</div>
+
+  <span class="timestamp">19:22</span>
+  <p>
+    이 시뮬레이션 모크업 사례에서 설계 규칙을 준수하고 레이어를 공백으로 두지 않으면서도 신호를 통과시킬 수 있는 차폐 솔루션을 찾을 수 있었습니다. 특히 본딩 사례에서 <span class="term">크로스-폴라라이저 차폐(Cross-Polarizer Shields)</span>를 통해 공동(Cavity)과 광학 간섭으로부터 광학 신호를 보호할 수 있습니다.
+  </p>
+  <div class="original-text">This simulated mockup case was able to find shielding solutions which were inside the design rule and avoided leaving any layer blank and still get this signal through VersaCross wire polarizers. Especially in these bonding cases, we're able to avoid or block the cavity and the optical nuisance from corrupting my optical signals.</div>
+
+  <span class="timestamp">19:49</span>
+  <p>
+    본딩 사례에서 차폐를 하지 않으면 큰 비대칭이 발생할 수 있습니다. 차폐 없이는 심각한 문제가 발생할 수 있으므로 매우 중요합니다. 질문이 있으시면 환영합니다. 청중 여러분의 관심에 깊이 감사드립니다. 감사합니다.
+  </p>
+  <div class="original-text">Like I said, the bonding cases show these large asymmetries. And if I don't shield, I could be in for a bad time. So I think it's really important and I invite any questions. And I'm so thankful for your attention. Thank you.</div>
+
+  <hr class="section-divider">
+
+  <div class="highlight-box">
+    <div class="label">핵심 요약 (Key Takeaways)</div>
+    <ul>
+      <li>EUV 리소그래피 스택에서 어떤 레이어도 공백으로 두지 않는 것이 필수적임</li>
+      <li>차폐(Shield), 더미 패턴(Dummy), 블로킹(Blocking)의 방향성이 오버레이 정확도에 결정적 영향을 미침</li>
+      <li>스캐닝 방향 쵸핑은 크로스토크 위험이 있으므로 주의 필요</li>
+      <li>광학 공동(Optical Cavity) 문제는 크로스-폴라라이저 블로킹으로 효과적으로 완화 가능</li>
+      <li>파라미터 공간이 방대하므로 D4C와 같은 통합 시뮬레이션 도구가 필수</li>
+      <li>본딩(Bonding) 사례에서 차폐 전략은 정합성과 수율에 직접적 영향을 줌</li>
+    </ul>
+  </div>
+
+</div>
+</body>
+</html>
