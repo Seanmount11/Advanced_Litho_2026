@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>DRAM 공정 오버레이 제어 최적화 - 발표 전사문 한국어 번역</title>
+<style>
+body {
+  font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;
+  font-size: 13px; line-height: 1.6;
+  color: #111; background: #f5f5f5; margin: 0; padding: 0;
+}
+.container {
+  max-width: 860px; margin: 0 auto; background: #fff;
+  padding: 36px 50px; box-shadow: 0 2px 14px rgba(0,0,0,0.09);
+}
+h1 { font-size:1.28em; font-weight:700; color:#1a237e;
+  border-bottom:2px solid #1a237e; padding-bottom:9px;
+  margin-bottom:6px; line-height:1.45; }
+h2 { font-size:1.05em; font-weight:700; color:#283593;
+  margin-top:26px; margin-bottom:7px;
+  border-left:4px solid #3949ab; padding-left:9px; }
+h3 { font-size:0.96em; font-weight:700; color:#37474f;
+  margin-top:18px; margin-bottom:5px; }
+h4 { font-size:0.90em; font-weight:700; color:#455a64;
+  margin-top:14px; margin-bottom:4px; }
+.meta { font-size:0.83em; color:#555; margin-bottom:3px; }
+.abstract-box {
+  background:#e8eaf6; border-left:4px solid #3949ab;
+  padding:12px 16px; margin:16px 0; border-radius:0 5px 5px 0; }
+.abstract-box .label {
+  font-weight:700; color:#1a237e; font-size:0.93em; margin-bottom:7px; }
+.keyword-box {
+  background:#f3f4f6; border:1px solid #c5cae9;
+  padding:7px 13px; border-radius:4px;
+  margin:7px 0 16px 0; font-size:0.83em; }
+p { margin:0 0 9px 0; text-align:justify; }
+.fig-box {
+  margin:18px 0; border:1px solid #c5cae9;
+  border-radius:5px; overflow:hidden; background:#fafafa; }
+.fig-box img { width:100%; display:block; }
+.fig-caption {
+  padding:8px 13px; font-size:0.81em; color:#333;
+  background:#eef0fb; border-top:1px solid #c5cae9; line-height:1.5; }
+.fig-caption strong { color:#1a237e; }
+.note-box {
+  background:#fff8e1; border-left:3px solid #f9a825;
+  padding:9px 13px; margin:12px 0;
+  border-radius:0 4px 4px 0; font-size:0.84em; }
+.note-box .label { font-weight:700; color:#e65100; margin-bottom:4px; }
+.transcript-box {
+  background:#f0f7ff; border:1px solid #90caf9;
+  border-radius:6px; padding:12px 16px;
+  margin:14px 0; font-size:0.84em; color:#0d1a2d; }
+.transcript-box .label {
+  font-weight:700; color:#0d47a1; margin-bottom:6px; font-size:0.9em; }
+table {
+  width:100%; border-collapse:collapse;
+  margin:12px 0; font-size:0.83em; }
+th { background:#3949ab; color:#fff; padding:5px 9px; text-align:center; }
+td { border:1px solid #c5cae9; padding:4px 9px; }
+tr:nth-child(even) td { background:#f3f4f6; }
+.term { font-style:italic; color:#1565c0; }
+.section-divider { border:none; border-top:1px dashed #c5cae9; margin:22px 0; }
+.toc {
+  background:#f5f5f5; border:1px solid #ddd;
+  padding:11px 16px; border-radius:4px;
+  margin-bottom:20px; font-size:0.84em; }
+.toc .toc-title { font-weight:700; margin-bottom:5px; color:#1a237e; }
+.toc a { color:#283593; text-decoration:none; display:block; padding:1px 0; }
+.toc a:hover { text-decoration:underline; }
+.toc .sub { padding-left:14px; }
+ul, ol { font-size:0.95em; margin:5px 0 9px 0; padding-left:20px; }
+li { margin-bottom:3px; }
+sup { font-size:0.75em; }
+.ref-box {
+  background:#f9f9f9; border:1px solid #ddd;
+  padding:10px 14px; border-radius:4px;
+  font-size:0.80em; line-height:1.55; }
+.ref-box p { margin:0 0 5px 0; }
+.highlight-box {
+  background:#e8f5e9; border-left:4px solid #43a047;
+  padding:9px 13px; margin:12px 0;
+  border-radius:0 4px 4px 0; font-size:0.88em; }
+.highlight-box .label { font-weight:700; color:#1b5e20; margin-bottom:4px; }
+.result-box {
+  background:#fce4ec; border:1px solid #f48fb1;
+  border-radius:5px; padding:10px 14px; margin:14px 0;
+  font-size:0.86em; }
+.result-box .label { font-weight:700; color:#880e4f; margin-bottom:5px; }
+.scheme-box {
+  background:#e3f2fd; border:1px solid #90caf9;
+  border-radius:5px; padding:10px 14px; margin:14px 0;
+  font-size:0.86em; }
+.scheme-box .label { font-weight:700; color:#0d47a1; margin-bottom:5px; }
+.timestamp {
+  display:inline-block; background:#3949ab; color:#fff;
+  font-size:0.78em; font-weight:700; border-radius:3px;
+  padding:1px 7px; margin-right:6px; vertical-align:middle; letter-spacing:0.5px;
+}
+.transcript-segment {
+  border-left: 3px solid #90caf9;
+  padding: 8px 14px;
+  margin: 10px 0;
+  background: #f8fbff;
+  border-radius: 0 4px 4px 0;
+}
+.orig-text {
+  color: #666; font-size: 0.82em; font-style: italic;
+  margin-top: 5px; padding-top: 5px;
+  border-top: 1px dashed #c5cae9;
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <h1>시계열 특징 공학 및 머신러닝 예측을 통한 DRAM 공정 오버레이 제어 최적화</h1>
+  <p class="meta"><strong>원제:</strong> Optimization of DRAM process overlay control via time-series feature engineering and machine learning prediction</p>
+  <p class="meta"><strong>발표자:</strong> 공동 저자 (삼성전자) — 제1저자 Wang Zhongliang(왕중량) 대리 발표</p>
+  <p class="meta"><strong>문서 유형:</strong> 학술 발표 전사문 한국어 번역 (원본 논문 PDF 없음)</p>
+
+  <div class="toc">
+    <div class="toc-title">목차</div>
+    <a href="#intro">00:00 — 발표 소개</a>
+    <a href="#motivation">00:35 — 오버레이 제어의 중요성</a>
+    <a href="#limitation">01:05 — 기존 피드포워드 방식의 한계</a>
+    <a href="#key-message">01:39 — 핵심 메시지</a>
+    <a href="#approach">02:17 — 연구 동기 및 접근법 구조</a>
+    <a href="#proposed">02:55 — 제안 접근법의 특징</a>
+    <a href="#timeseries">03:26 — 시계열 기반 스캐너 파라미터 예측</a>
+    <a href="#eda">04:03 — 탐색적 데이터 분석</a>
+    <a href="#postphoto">04:36 — 사후 포토(Post Photo) 공정의 영향</a>
+    <a href="#radial">05:15 — 방사형 대칭성과 수학적 표현</a>
+    <a href="#zernike">05:55 — 제르니케 다항식 선택</a>
+    <a href="#timeevo">06:29 — 시간적 진화 비교</a>
+    <a href="#mlmodel">07:03 — 머신러닝 시계열 모델링</a>
+    <a href="#xgb">07:38 — XGBRegressor 성능</a>
+    <a href="#expand">08:31 — 특징 공간 확장</a>
+    <a href="#prephoto">09:02 — 사전 포토(Pre Photo) 특징 도입</a>
+    <a href="#metrology">09:32 — 계측 데이터 활용</a>
+    <a href="#wafermap">10:06 — 웨이퍼 맵 유사성 관찰</a>
+    <a href="#finalmodel">10:44 — 최종 모델 구성</a>
+    <a href="#importance">11:17 — 특징 중요도 분석</a>
+    <a href="#results">11:51 — 최종 예측 결과</a>
+    <a href="#quantitative">12:23 — 정량적 개선 성과</a>
+    <a href="#summary">12:55 — 요약 및 결론</a>
+    <a href="#closing">13:56 — 마무리</a>
+  </div>
+
+  <div class="abstract-box">
+    <div class="label">발표 개요</div>
+    <p>본 발표는 삼성전자에서 수행한 연구로, DRAM 공정의 오버레이(Overlay) 제어를 개선하기 위해 시계열 특징 공학(Time-Series Feature Engineering)과 머신러닝(Machine Learning) 예측 기법을 결합한 프레임워크를 소개합니다. 기존 피드포워드(Feedforward) 방식의 한계를 극복하고, 팹(Fab) 내 기존 데이터를 활용하여 오버레이 예측 정확도를 최대 47%까지 향상시킨 연구입니다.</p>
+  </div>
+
+  <div class="keyword-box">
+    <strong>주요 키워드:</strong> 오버레이(Overlay), 피드포워드 제어(Feedforward Control), 시계열 모델링(Time-Series Modeling), 제르니케 다항식(Zernike Polynomials), XGBRegressor, 특징 공학(Feature Engineering), DRAM, APC(Advanced Process Control), 계측(Metrology)
+  </div>
+
+  <hr class="section-divider">
+
+  <h2 id="intro">발표 소개</h2>
+
+  <div class="transcript-segment">
+    <p><span class="timestamp">00:00</span> 안녕하세요, 오늘 발표에 참석해 주셔서 감사합니다. 저는 삼성전자 소속으로, 이 논문의 공동 저자입니다. 제1저자인 Wang Zhongliang(왕중량)이 이번 학술대회에 참석할 수 없어 제가 대신 발표를 진행하게 되었습니다. 오늘 발표 주제는 <strong>시계열 특징 공학 및 머신러닝 예측을 통한 DRAM 공정 오버레이 제어 최적화</strong>입니다.</p>
+    <div class="orig-text">Good afternoon. Thank you for coming today. I'm from Samsung Electronics and I'm actually I'm a co-author of this paper. And the main author, the first author, Wang Jun yang, couldn't attend this conference. So I'm presenting in behalf of Wang zhongliang. So today's topic, the title is optimization of DRM process overlay overlay control via time series, feature engineering and machine learning prediction.</div>
+  </div>
+
+  <hr class="section-divider">
+
+  <h2 id="motivation">오버레이 제어의 중요성</h2>
+
+  <div class="transcript-segment">
+    <p><span class="timestamp">00:35</span> 먼저 오버레이 제어가 왜 이렇게 중요한 과제인지 설명하겠습니다. 오버레이(Overlay)는 첨단 DRAM 제조 공정에서 가장 중요한 핵심 지표 중 하나입니다. 매우 미세한 정렬 오차(Misalignment)만으로도 소자 불량(Device Failure)으로 직결될 수 있으며, 동시에 마스크 정렬 타겟(Mask Aligned Target)은 이미 실현 가능성의 한계에 도달해 있습니다.</p>
+    <div class="orig-text">Let me start by explaining why overlay control is such a critical challenge. Overlay is a critical metric in advanced DRM manufacturing. Even a very small misalignment can directly lead to device failure, and at the same time a mask aligned target are already at the edge of feasibility.</div>
+  </div>
+
+  <hr class="section-divider">
+
+  <h2 id="limitation">기존 피드포워드 방식의 한계</h2>
+
+  <div class="transcript-segment">
+    <p><span class="timestamp">01:05</span> 이러한 타겟을 달성하기 위해서는 상당한 인력과 시간, 재료가 필요합니다. 그러나 현재 대부분의 피드포워드(Feedforward) 오버레이 방식은 이전 로트(Lot)의 이력 정보에 의존하고 있습니다. 이러한 방식은 인라인(Inline) 실시간 공정 신호에는 본질적으로 무감각합니다. 이것이 가장 큰 한계입니다. 팹(Fab)은 이미 대량의 유용한 데이터를 생성하고 있음에도 불구하고 말입니다.</p>
+    <div class="orig-text">Achieving them requires a significant amount of manpower to time. Materials however, most existing feedforward overlay schemes rely on historical lot information. They are essentially blind to inline real time process signals. This is a major. This is a major limitation because the Fed already generates a large amount of valuable data.</div>
+  </div>
+
+  <div class="transcript-segment">
+    <p><span class="timestamp">01:39</span> 공정 로그(Process Log), 센서 데이터(Sensor Data), 장비 수준 파라미터(Tool Level Parameter) 등 다양한 데이터가 존재하지만, 이 데이터들은 오버레이 제어에 직접 활용되는 경우가 거의 없습니다. 최근 머신러닝과 고성능 컴퓨팅(HPC) 플랫폼의 발전으로, 비교적 적은 데이터 규모에서도 물리 기반 모델(Physical-Aware Model)을 추출하여 실시간으로 적용하는 것이 가능해졌습니다. 우리의 핵심 메시지는 간단합니다: <strong>오버레이 보정은 더 지능적이고 선제적(Proactive)으로 이루어져야 한다</strong>는 것입니다.</p>
+    <div class="orig-text">Process logs, sensor data and tool level parameters. Yet these data are rarely used directly for overlay control. With recent advances in machine learning and HPC platforms, it has become possible to extract physical aware models from relatively modest data volume and apply them in real time. So our key message is simple overlay correction must become more intelligent and proactive.</div>
+  </div>
+
+  <hr class="section-divider">
+
+  <h2 id="approach">연구 동기 및 접근법 구조</h2>
+
+  <div class="transcript-segment">
+    <p><span class="timestamp">02:17</span> 이 슬라이드는 연구 동기와 전체 접근법 구조를 요약합니다. 기존 방식에서는 스캐너(Scanner)에 대한 피드포워드 입력이 이전 로트(Previous Lot)의 ADI(After Develop Inspection) 및 ACI(After Clean Inspection) 오버레이 측정값으로부터 제공됩니다. 노광(Exposure) 이후에는 단일 사후 스캐너 ADC(After Develop & Clean) 측정값만이 피드백으로 사용 가능하며, 이 피드백은 주로 고비용의 재작업(Rework) 단계가 필요한지 여부를 결정하는 데 활용됩니다.</p>
+    <div class="orig-text">This slide summarizes the motivation and overall structure of our approach. In the conventional scheme, the scanner input for recurrent lab is feed forward from the previous lot using measured a.d.I and Aci overlay information. After exposure, only a single post scanner ADC measurement is available as feedback, and this feedback is mainly used to decide whether a costly rework step is required.</div>
+  </div>
+
+  <hr class="section-divider">
+
+  <h2 id="proposed">제안 접근법의 특징</h2>
+
+  <div class="transcript-segment">
+    <p><span class="timestamp">02:55</span> 이 피드백은 비용이 크고 처리량(Throughput)을 저해하기 때문에, 빈번하거나 지속적으로 적용될 수 없습니다. 반면에, 우리가 제안하는 접근법은 포토(Photo) 공정 전후 양쪽에서의 다중 자기 피드백(Self Feedback) 특징, 그리고 팹 내에 이미 존재하는 시계열 정보를 활용합니다.</p>
+    <div class="orig-text">Because this feedback is expensive and disrupts throughput, it cannot be applied frequently or continuously. But in contrast, our proposed approach exhibits multiple self feedback features from both pre and post photo processes, as well as time series information already available in the Fab.</div>
+  </div>
+
+  <hr class="section-divider">
+
+  <h2 id="timeseries">시계열 기반 스캐너 파라미터 예측</h2>
+
+  <div class="transcript-segment">
+    <p><span class="timestamp">03:26</span> 중요한 점은 추가적인 방법론이 전혀 필요하지 않다는 것입니다. 오버레이 맵(Overlay Map)을 점 단위로 예측하는 대신, 스캐너 입력 모델 파라미터(Scanner Input Model Parameter)를 시계열(Time Series)로 예측합니다. 이 방법은 데이터 효율이 훨씬 높으면서도 필수적인 물리 정보를 그대로 보존합니다. 목표는 최종 셀 오버레이(Cell Overlay)의 잔차 페이딩(Residual Fading) 성분을 최소화하는 것입니다.</p>
+    <div class="orig-text">Importantly, no additional methodology is required. Instead of predicting full overlay maps point by point, we predict scanner input model parameters as a time series, which is far more data efficient while still preserving the essential physics. The goal is to minimize the residual fading component in the final cell overlay.</div>
+  </div>
+
+  <hr class="section-divider">
+
+  <h2 id="eda">탐색적 데이터 분석 (EDA)</h2>
+
+  <div class="transcript-segment">
+    <p><span class="timestamp">04:03</span> 전체 모델을 구축하기에 앞서, 단 하나의 사후 포토(Post Photo) 특징만 추가했을 때 얼마나 많은 개선을 얻을 수 있는지에 대한 단순한 질문에서 시작합니다. 저희는 단일하고 물리적으로 의미 있는 특징에서 얻을 수 있는 예측 성능 향상을 정량화하기 위해 탐색적 데이터 분석(EDA, Exploratory Data Analysis)을 수행했습니다. 이 단계는 특징 공간을 더 확장하기 전에 각 특징의 기여도를 명확히 분리할 수 있게 해줍니다.</p>
+    <div class="orig-text">Yeah, we begin with the simple question how much improvement can we obtain by adding just one post photo feature before building a full model. We performed an exploratory data analysis to quantify the predictive gain from a single or physically meaningful feature. This step allows us to clearly isolate the contribution of each feature before expanding the feature space further.</div>
+  </div>
+
+  <hr class="section-divider">
+
+  <h2 id="postphoto">사후 포토(Post Photo) 공정의 영향</h2>
+
+  <div class="transcript-segment">
+    <p><span class="timestamp">04:36</span> 오버레이에 가장 강하게 영향을 미치는 사후 포토 공정은 <strong>건식 식각(Dry Etch) 하드웨어 구성</strong>입니다. 이 하드웨어는 가스 주입기(Gas Injector), 히터(Heater), 그리고 쉬스(Sheath)라고도 불리는 엣지 링(Edge Ring)으로 구성됩니다. 이 중 엣지 링 높이의 변화는 이온 방향 기울기(Ion Direction Gradient)를 변형시키고, 따라서 오버레이 거동에 영향을 준다는 것이 알려져 있습니다.</p>
+    <div class="orig-text">Yep, the post photo processes that most strongly influence overlay is dry edge hardware configuration. This hardware consists of a gas injector, a heater, and an edge ring, also known as sheath Among these components, changes in the edge ring height are known to modify ion direction gradients and therefore affect overlay behavior.</div>
+  </div>
+
+  <hr class="section-divider">
+
+  <h2 id="radial">방사형 대칭성과 수학적 표현</h2>
+
+  <div class="transcript-segment">
+    <p><span class="timestamp">05:15</span> 핵심 관찰은 대부분의 사후 포토 하드웨어가 방사형 대칭성(Radial Symmetry)을 나타낸다는 것입니다. 이 물리적 특성이 오프라인 모델링을 위한 수학적 표현 방법 선택에 직접적인 지침을 제공합니다. 웨이퍼 내(Within-Wafer) 오버레이 거동을 모델링하기 위해, 하드웨어와 스캐너 광학계 모두의 방사형 대칭성에 기반하여 여러 기저(Basis) 표현 후보들을 평가하였습니다.</p>
+    <div class="orig-text">A key observation is that most post photo hardware exhibit radial symmetry. This physical characteristic directly guides our choices. Mathematical representation for offline modeling. Yeah two model within Wayfair. Overlay behavior. We evaluated several candidate basis representations based on the radial symmetry of both the hardware and the scanner optics.</div>
+  </div>
+
+  <hr class="section-divider">
+
+  <h2 id="zernike">제르니케 다항식(Zernike Polynomials) 선택</h2>
+
+  <div class="transcript-segment">
+    <p><span class="timestamp">05:55</span> 저희는 <strong>제르니케 다항식(Zernike Polynomials)</strong>을 가장 적합한 특징으로 선택하였습니다. 주요 계수(Key Coefficient)들은 샷 수준(Shot Level) 노이즈를 제외하면서 자연스럽게 웨이퍼 수준의 전역 기울기(Global Gradient)를 포착합니다. 완전 다항식 표현에서 제르니케 재구성(Zernike Reconstruction)을 빼면, 샷(Shot) 관련 성분을 분리하고 웨이퍼 규모의 변동에만 집중할 수 있습니다.</p>
+    <div class="orig-text">We selected Zernike polynomials as the most suitable features. Is there any key coefficients naturally capture wafer level. Global gradient while excluding short level noise. By subtracting subtracting the Zernike reconstruction from a full polynomial representation, we can isolate a shot related components and focus exclusively on the wafer scale variation.</div>
+  </div>
+
+  <div class="transcript-segment">
+    <p><span class="timestamp">06:29</span> 이로 인해 K 파라미터는 오버레이 예측에 이상적인 특징이 됩니다. 이 슬라이드는 기존 다항식 회귀(Polynomial Regression)와 본 연구에서 사용한 선형 회귀(Linear Regression)를 이용하여 오버레이 특징의 시간적 진화(Time Evolution)를 비교합니다. 여기서 보이듯이, 제르니케 회귀(Zernike Regression)는 다중공선성(Collinearity) 문제를 회피하면서 클러스터링 거동(Clustering Behavior)과 시간적 역학(Temporal Dynamics) 모두를 명확하게 포착합니다.</p>
+    <div class="orig-text">This makes a K parameters ideal for overlay prediction. This slide compared the time evolution of overlay features using conventional polynomial regression and linear regression, as shown here. Zernike regression clearly captures both clustering behavior and temporal dynamics while avoiding a collinearity. Issues caused by sampling.</div>
+  </div>
+
+  <hr class="section-divider">
+
+  <h2 id="mlmodel">머신러닝 시계열 모델링</h2>
+
+  <div class="transcript-segment">
+    <p><span class="timestamp">07:03</span> 결과적으로, 이 연구에서는 K 파라미터를 시차 특징(Lag Feature)과 시계열 모델링의 예측 타겟(Ground Truth Prediction Target) 양쪽으로 모두 활용합니다. 이제 머신러닝을 이용한 시계열 모델링을 소개하겠습니다.</p>
+    <div class="orig-text">As a result, in this study, we use a model parameters both as lag features. And as the ground truth prediction targets for time series modeling. OK next. Next, we introduced time series modeling using machine learning.</div>
+  </div>
+
+  <hr class="section-divider">
+
+  <h2 id="xgb">XGBRegressor 성능</h2>
+
+  <div class="transcript-segment">
+    <p><span class="timestamp">07:38</span> 여러 후보를 평가한 결과, 견고성과 유연성을 이유로 <strong>XGBRegressor</strong>를 선택하였습니다. 시차 특징(Lagged Feature)과 사후 포토 공정 변수들을 함께 사용하여 모델을 학습하고 하이퍼파라미터(Hyperparameter) 최적화를 수행하였습니다. 기존의 사전 접근법(Prior Approach)과 비교했을 때, 이 XGB 기반 모델은 실제값(Ground Truth)에 훨씬 더 가까운 MTD(Model Target Distortion) 값을 예측하며, 전반적으로 기존 대비 약 <strong>25% 예측 정확도 향상</strong>을 달성하였습니다.</p>
+    <div class="orig-text">After evaluating several candidates, we selected XGB regressor for its robustness and flexibility. We trained the model using lagged features together with post photo process variables and performed hyperparameter optimization. Compared with conventional prior approach, this XGB based model, predict predicts MTD values much closer to the ground truth, and overall, this results in approximately 25% improvement in prediction accuracy relative to the original one.</div>
+  </div>
+
+  <div class="result-box">
+    <div class="label">📊 1차 성과</div>
+    <p>XGBRegressor + 시차 특징 + 사후 포토 공정 변수 → 기존 대비 <strong>약 25% 예측 정확도 향상</strong></p>
+  </div>
+
+  <hr class="section-divider">
+
+  <h2 id="expand">특징 공간 확장</h2>
+
+  <div class="transcript-segment">
+    <p><span class="timestamp">08:31</span> 이 개선을 바탕으로 특징 공간을 더욱 확장합니다. 사후 식각(Post Etch) 변수 외에도, 사전 포토(Pre Photo) 공정 파라미터와 핵심 관련 계측(Metrology) 정보를 추가로 반영하였습니다. 모든 추가 특징은 오버레이 거동과의 명확한 물리적 관련성에 기반하여 선별되었습니다.</p>
+    <div class="orig-text">Yep building on this improvement, we expanded the feature space further. In addition to post lethal variables we incorporate, we incorporated a preferred process parameters and key related methodology information. All additional features were selected based on clear physical relevance to overlay behavior.</div>
+  </div>
+
+  <hr class="section-divider">
+
+  <h2 id="prephoto">사전 포토(Pre Photo) 특징 도입</h2>
+
+  <div class="transcript-segment">
+    <p><span class="timestamp">09:02</span> 효과적인 사전 포토 특징을 발굴하는 것은 도메인 지식(Domain Knowledge) 기반의 스크리닝(Screening)이 필요합니다. 예를 들어, 케미컬 기계적 연마(CMP, Chemical Mechanical Planarization) 공정은 방사형 비대칭(Radial Asymmetric) 성분을 유발할 수 있어 오버레이 예측의 강력한 후보가 됩니다.</p>
+    <div class="orig-text">Yep and I didn't. Identifying effective prefrontal features required domain knowledge domain. Knowledge driven screening. For example, Kempe processes can introduce radial asymmetric components, making them strong candidates for overlay prediction.</div>
+  </div>
+
+  <hr class="section-divider">
+
+  <h2 id="metrology">계측 데이터 활용</h2>
+
+  <div class="transcript-segment">
+    <p><span class="timestamp">09:32</span> 또한 계측(Metrology) 데이터는 핵심(Key) 관련 비대칭성을 정량화할 수 있으며, 핵심 오버레이 신호의 오정렬(Misleading)을 직접 설명할 수 있습니다. 따라서 저희는 무작정 특징을 추가하는 대신, 근본 원인(Root Cause) 공정을 체계적으로 규명하고 이를 모델에 반영하였습니다.</p>
+    <div class="orig-text">In addition, metrology data can quantify key related asymmetry. It can directly explain misleading of key overlay signals. So rather than blindly adding features, we systemic. We identified root cause processes and incorporated them into the model.</div>
+  </div>
+
+  <hr class="section-divider">
+
+  <h2 id="wafermap">웨이퍼 맵 유사성 관찰</h2>
+
+  <div class="transcript-segment">
+    <p><span class="timestamp">10:06</span> 이 슬라이드는 중요한 관찰을 보여줍니다. 사후 포토 계측(Post Photo Metrology)에서 얻은 웨이퍼 맵(Wafer Map)이 최종 셀 오버레이 맵(Cell Overlay Map)과 매우 유사한 형태를 보입니다. 이 공간적 유사성은 사후 포토 계측이 오버레이 거동을 지배하는 것과 동일한 물리적 현상의 상당 부분을 포착하고 있음을 의미합니다. 이 유사성을 적절한 수학적 특징으로 변환하는 것이 저희 방법론의 핵심 부분입니다.</p>
+    <div class="orig-text">Yep this slide shows an observation. The wafer maps obtained from post photo metrology closely resemble the final cell of lightmap. This spatial similarity indicates that post photo metrology capture much of the same physics that governs overlay behavior. Translating this similarity into appropriate mathematical features is a key part of our methodology.</div>
+  </div>
+
+  <hr class="section-divider">
+
+  <h2 id="finalmodel">최종 모델 구성</h2>
+
+  <div class="transcript-segment">
+    <p><span class="timestamp">10:44</span> 최종 모델 역시 XGBRegressor를 사용하며, 다수의 제품(Product) 및 레이어(Layer) 데이터를 통합하여 학습하였습니다. 학습 후 특징 중요도(Feature Importance)를 분석하였으며, 대부분의 경우 중요도 순위는 도메인 제약(Domain Constraint)을 명시적으로 부과하지 않았음에도 불구하고 저희의 물리적 직관과 매우 잘 일치하였습니다.</p>
+    <div class="orig-text">The final model also uses xgbregressor trained with data from multiple products and layers, and after training we analyzed feature importance. In most cases, the importance ranking aligned very well with our physical intuition, even without explicitly enforcing domain constraints.</div>
+  </div>
+
+  <hr class="section-divider">
+
+  <h2 id="importance">특징 중요도 분석</h2>
+
+  <div class="transcript-segment">
+    <p><span class="timestamp">11:17</span> 이 결과는 모델이 피상적인 상관관계(Shallow Correlation)가 아닌 의미 있는 공정 거동(Process Behavior)을 학습하고 있다는 신뢰를 높여줍니다. 이 슬라이드는 최종 예측 결과를 요약합니다. 왼쪽 패널 A는 실제 오버레이 맵(Ground Truth Overlay Map)을 보여주고, 가운데 패널 B는 예측값과의 비교를 나타냅니다.</p>
+    <div class="orig-text">This result increases confidence that the model is learning meaningful process behavior rather than some shallow correlations. In this slide, summarizes the final prediction results at the A panel A on the left hand side shows the ground truth overlay map, and the panel B in the middle of the slide compares a prediction.</div>
+  </div>
+
+  <hr class="section-divider">
+
+  <h2 id="results">최종 예측 결과</h2>
+
+  <div class="transcript-segment">
+    <p><span class="timestamp">11:51</span> 특징 그룹을 모델에 점진적으로 추가함에 따라, 각 특징 그룹이 포함될수록 예측 오버레이가 실제값에 점점 더 가까워지고 잔차 오차(Residual Error)가 줄어드는 것을 확인할 수 있습니다. 오른쪽 패널은 세 번째 계수(Third Coefficient)에 대한 테스트 샘플 오차를 보여줍니다. 기준선(Baseline)과 비교했을 때,</p>
+    <div class="orig-text">As we incrementally add features to the model, as each feature group is included, the predicted overlay becomes increasingly similar to the ground truth and residual error decreases, and the penalty on the right hand side shows the test. Test sample error for the third coefficient. Compared with the baseline.</div>
+  </div>
+
+  <hr class="section-divider">
+
+  <h2 id="quantitative">정량적 개선 성과</h2>
+
+  <div class="transcript-segment">
+    <p><span class="timestamp">12:23</span> 사후 포토 특징 추가 시 약 <strong>25% 향상</strong>, 비대칭 특징 추가 시 <strong>36%까지 향상</strong>, 그리고 모든 특징을 통합하면 총 약 <strong>47% 향상</strong>을 달성합니다. 이는 특징 기반 특징 공학(Feature Engineering)의 가치를 명확히 증명합니다.</p>
+    <div class="orig-text">Adding post photo features yield about 25% improvement, and adding asymmetric features increases this to 36% and incorporating all features achieves a total improvement of approximately 47% This clearly demonstrates the value of feature driven feature engineering.</div>
+  </div>
+
+  <div class="result-box">
+    <div class="label">📊 최종 정량적 성과 요약</div>
+    <table>
+      <tr>
+        <th>적용 특징</th>
+        <th>예측 정확도 향상</th>
+      </tr>
+      <tr>
+        <td>사후 포토 특징(Post Photo Features) 추가</td>
+        <td><strong>약 25% 향상</strong></td>
+      </tr>
+      <tr>
+        <td>비대칭 특징(Asymmetric Features) 추가</td>
+        <td><strong>36%까지 향상</strong></td>
+      </tr>
+      <tr>
+        <td>전체 특징(All Features) 통합</td>
+        <td><strong>약 47% 향상</strong></td>
+      </tr>
+    </table>
+  </div>
+
+  <hr class="section-divider">
+
+  <h2 id="summary">요약 및 결론</h2>
+
+  <div class="transcript-segment">
+    <p><span class="timestamp">12:55</span> 요약하면, 저희는 기존 팹 데이터와 계측 데이터만을 활용하여 오버레이 예측을 위한 시계열 머신러닝 프레임워크를 개발하였습니다. 도메인 지식과 데이터 기반 모델링을 결합함으로써, 새로운 방법론이나 공정 비용 추가 없이 상당한 정확도 향상을 달성하였습니다. 사후 포토 특징이 약 30% 향상을 제공하고, 계측 특징이 추가로 15%, 그리고 포토 전 특징이 추가로 10%를 기여하였습니다.</p>
+    <div class="orig-text">To summarize, we developed a time series machine learning framework for overlay prediction using only existing fab and metrology data. By combining domain knowledge with data driven modeling, we achieved significant accuracy improvement without adding new methodology or process cost. Post photo features provided a lovely. 30% improvement and methodology features added another 15% and photo features contributed an additional 10%</div>
+  </div>
+
+  <div class="transcript-segment">
+    <p><span class="timestamp">13:27</span> 이 접근법은 고용량 제조(High Volume Manufacturing)에서 실용적이고 확장 가능한 새로운 고급 APC(Advanced Process Control) 루프를 가능하게 합니다. 들어주셔서 감사합니다.</p>
+    <div class="orig-text">Yeah this approach enables a new advanced APC loop that is both practical and scalable for high volume manufacturing. Thank you for listening.</div>
+  </div>
+
+  <div class="highlight-box">
+    <div class="label">✅ 핵심 기여 요약</div>
+    <ul>
+      <li>추가 장비나 방법론 없이 기존 팹 데이터만 활용</li>
+      <li>제르니케 다항식 기반 시계열 특징 공학으로 물리적 의미 보존</li>
+      <li>XGBRegressor 모델로 최대 47% 오버레이 예측 정확도 향상</li>
+      <li>다양한 제품/레이어에 걸쳐 확장 가능한 실용적 APC 루프 구현</li>
+    </ul>
+  </div>
+
+  <hr class="section-divider">
+
+  <h2 id="closing">마무리</h2>
+
+  <div class="transcript-segment">
+    <p><span class="timestamp">13:56</span> 발표를 들어주셔서 감사합니다. 앞서 말씀드린 것처럼 저는 이 연구의 공동 저자입니다. 더 심화된 질문이 있으시면 제1저자 Wang Zhongliang(왕중량)에게 아래 이메일로 직접 연락해 주시기 바랍니다. 감사합니다.</p>
+    <div class="orig-text">My presentation. Thank you. And as I mentioned at the beginning, I'm a co-author of this research. So for the deeper questions, please contact the first author, Wang Jun yang, directly by this email. Thank you. Thank you.</div>
+  </div>
+
+  <hr class="section-divider">
+
+  <div class="transcript-box">
+    <div class="label">번역 정보</div>
+    <p>본 문서는 학술 발표 전사문(Transcript)만을 번역한 것으로, 원본 논문 PDF는 포함되어 있지 않습니다. 각 단락 하단의 이탤릭체 회색 텍스트는 원문 영어 전사문입니다. 타임스탬프(파란색 배지)는 발표 영상 기준 시간입니다.</p>
+  </div>
+
+</div>
+</body>
+</html>
